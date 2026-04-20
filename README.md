@@ -24,27 +24,25 @@ Built with <15 files of fully documented Verilog, complete documentation on arch
 
 # Overview
 
-This project is built on top of the [tiny-gpu] by adam, it is important to go through his read me to understand the fondation of our project.
+This project is built on top of the [tiny-gpu](https://github.com/adam-maj/tiny-gpu) by adam maj, it is important to go through his read me to understand the fondation of our project.
 
 The goal of this project is to help introduce cal poly CARP student to GPU architecture with getting hands on expence with building, designing and verification on a GPU.
 
-Our current project is expanding the ISA to acomidate RISC-V and to be able to take advantage of the compiler built by the vortex team at georgia tech.
+Our current project is expanding the ISA to acomidate RISC-V and to be able to take advantage of the compiler built by the [vortex](https://vortex.cc.gatech.edu/) team at georgia tech.
 
 ## Whats New in GAR?
 
 > [!IMPORTANT]
 >
 > **Current GAR expantions** 
->
-> Warp schedular, this adition allows for a paramatraizable warp size that is composed from the thread block that is scheduled onto the compute core, but also has warps scheduled in a round robin fasion
+> Make sure to read and understand the orginal tiny-gpu before starting to got throught the GAR core because every thing we do is going to build off that 
+> 
+, 
 
 
 
-1. **Architecture** - What does the architecture of a GPU look like? What are the most important elements?
-2. **Parallelization** - How is the SIMD progamming model implemented in hardware?
-3. **Memory** - How does a GPU work around the constraints of limited memory bandwidth?
-
-After understanding the fundamentals laid out in this project, you can checkout the [advanced functionality section](#advanced-functionality) to understand some of the most important optimizations made in production grade GPUs (that are more challenging to implement) which improve performance.
+1. **Warp schedular** - this adition allows for a paramatraizable warp size that is composed from the thread block that is scheduled onto the compute core, but also has warps scheduled in a round robin fasion
+  a
 
 # Architecture
 
@@ -58,10 +56,10 @@ After understanding the fundamentals laid out in this project, you can checkout 
 For the current GAR project these are the changes that need to be made to each of the following modules
 
 1. Device control register
-2. Dispatcher
-3. Variable number of compute cores
-4. Memory controllers for data memory & program memory
-5. Cache
+2. Decoder
+3. LSU
+4. ALU
+5. PC
 
 ### Device Control Register
 
@@ -144,101 +142,7 @@ In practice, several of these steps could be compressed to be optimize processin
 
 ### Thread
 
-![Thread](/docs/images/thread.png)
 
-Each thread within each core follows the above execution path to perform computations on the data in it's dedicated register file.
-
-This resembles a standard CPU diagram, and is quite similar in functionality as well. The main difference is that the `%blockIdx`, `%blockDim`, and `%threadIdx` values lie in the read-only registers for each thread, enabling SIMD functionality.
-
-# Kernels
-
-I wrote a matrix addition and matrix multiplication kernel using my ISA as a proof of concept to demonstrate SIMD programming and execution with my GPU. The test files in this repository are capable of fully simulating the execution of these kernels on the GPU, producing data memory states and a complete execution trace.
-
-### Matrix Addition
-
-This matrix addition kernel adds two 1 x 8 matrices by performing 8 element wise additions in separate threads.
-
-This demonstration makes use of the `%blockIdx`, `%blockDim`, and `%threadIdx` registers to show SIMD programming on this GPU. It also uses the `LDR` and `STR` instructions which require async memory management.
-
-`matadd.asm`
-
-```asm
-.threads 8
-.data 0 1 2 3 4 5 6 7          ; matrix A (1 x 8)
-.data 0 1 2 3 4 5 6 7          ; matrix B (1 x 8)
-
-MUL R0, %blockIdx, %blockDim
-ADD R0, R0, %threadIdx         ; i = blockIdx * blockDim + threadIdx
-
-CONST R1, #0                   ; baseA (matrix A base address)
-CONST R2, #8                   ; baseB (matrix B base address)
-CONST R3, #16                  ; baseC (matrix C base address)
-
-ADD R4, R1, R0                 ; addr(A[i]) = baseA + i
-LDR R4, R4                     ; load A[i] from global memory
-
-ADD R5, R2, R0                 ; addr(B[i]) = baseB + i
-LDR R5, R5                     ; load B[i] from global memory
-
-ADD R6, R4, R5                 ; C[i] = A[i] + B[i]
-
-ADD R7, R3, R0                 ; addr(C[i]) = baseC + i
-STR R7, R6                     ; store C[i] in global memory
-
-RET                            ; end of kernel
-```
-
-### Matrix Multiplication
-
-The matrix multiplication kernel multiplies two 2x2 matrices. It performs element wise calculation of the dot product of the relevant row and column and uses the `CMP` and `BRnzp` instructions to demonstrate branching within the threads (notably, all branches converge so this kernel works on the current tiny-gpu implementation).
-
-`matmul.asm`
-
-```asm
-.threads 4
-.data 1 2 3 4                  ; matrix A (2 x 2)
-.data 1 2 3 4                  ; matrix B (2 x 2)
-
-MUL R0, %blockIdx, %blockDim
-ADD R0, R0, %threadIdx         ; i = blockIdx * blockDim + threadIdx
-
-CONST R1, #1                   ; increment
-CONST R2, #2                   ; N (matrix inner dimension)
-CONST R3, #0                   ; baseA (matrix A base address)
-CONST R4, #4                   ; baseB (matrix B base address)
-CONST R5, #8                   ; baseC (matrix C base address)
-
-DIV R6, R0, R2                 ; row = i // N
-MUL R7, R6, R2
-SUB R7, R0, R7                 ; col = i % N
-
-CONST R8, #0                   ; acc = 0
-CONST R9, #0                   ; k = 0
-
-LOOP:
-  MUL R10, R6, R2
-  ADD R10, R10, R9
-  ADD R10, R10, R3             ; addr(A[i]) = row * N + k + baseA
-  LDR R10, R10                 ; load A[i] from global memory
-
-  MUL R11, R9, R2
-  ADD R11, R11, R7
-  ADD R11, R11, R4             ; addr(B[i]) = k * N + col + baseB
-  LDR R11, R11                 ; load B[i] from global memory
-
-  MUL R12, R10, R11
-  ADD R8, R8, R12              ; acc = acc + A[i] * B[i]
-
-  ADD R9, R9, R1               ; increment k
-
-  CMP R9, R2
-  BRn LOOP                    ; loop while k < N
-
-ADD R9, R5, R0                 ; addr(C[i]) = baseC + i
-STR R9, R8                     ; store C[i] in global memory
-
-RET                            ; end of kernel
-```
 
 # Simulation
 
