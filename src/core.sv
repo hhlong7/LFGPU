@@ -10,8 +10,8 @@ module core #(
     parameter DATA_MEM_DATA_BITS = 8,
     parameter PROGRAM_MEM_ADDR_BITS = 8,
     parameter PROGRAM_MEM_DATA_BITS = 16,
-    parameter WARPS_PER_CORE = 2,
-    parameter THREADS_PER_WARP = 2,
+    parameter WARPS_PER_CORE = 1,
+    parameter THREADS_PER_WARP = 4,
     parameter THREADS_PER_BLOCK = 4
 ) (
     input wire clk,
@@ -89,6 +89,10 @@ module core #(
     reg decoded_pc_mux;                     // Select source of next PC
     reg decoded_ret;
 
+    // Divergence Stack Signals
+    reg divergence_event; // Signal indicating a divergence event (e.g., branch instruction)
+    reg rejoin_event; // Signal indicating a rejoin event (e.g., reconvergence point)
+    reg [7:0] rejoin_event_pc; // The PC to rejoin to on a JOINER instruction after divergence
     // Fetcher
     fetcher #(
         .PROGRAM_MEM_ADDR_BITS(PROGRAM_MEM_ADDR_BITS),
@@ -125,7 +129,9 @@ module core #(
         .decoded_alu_arithmetic_mux(decoded_alu_arithmetic_mux),
         .decoded_alu_output_mux(decoded_alu_output_mux),
         .decoded_pc_mux(decoded_pc_mux),
-        .decoded_ret(decoded_ret)
+        .decoded_ret(decoded_ret),
+        .rejoin_event(rejoin_event),
+        .divergence_event(divergence_event)
     );
 
     // Scheduler
@@ -138,19 +144,29 @@ module core #(
         .reset(reset),
         .start(start),
         .thread_count(thread_count),
+
+        .decoded_mem_read_enable(decoded_mem_read_enable),
+        .decoded_mem_write_enable(decoded_mem_write_enable),
+        .decoded_ret(decoded_ret),
+
         .fetcher_state(fetcher_state),
+        .lsu_state(lsu_state),
+
+        .divergence_event(divergence_event),
+        .rejoin_event(rejoin_event),
+        .decoded_immediate(decoded_immediate),
+        .rejoin_event_pc(rejoin_event_pc),
+
         .warp_index(warp_index),
         .warp_ids(warp_ids),
         .warp_groups(warp_groups),
         .masks(masks),
-        .warp(warp),
-        .core_state(core_state),
-        .decoded_mem_read_enable(decoded_mem_read_enable),
-        .decoded_mem_write_enable(decoded_mem_write_enable),
-        .decoded_ret(decoded_ret),
-        .lsu_state(lsu_state),
+
         .current_pc(current_pc),
         .next_pc(next_pc),
+
+        .core_state(core_state),
+        .warp(warp),
         .done(done)
     );
 
@@ -216,7 +232,8 @@ module core #(
         // Program Counter
         pc #(
             .DATA_MEM_DATA_BITS(DATA_MEM_DATA_BITS),
-            .PROGRAM_MEM_ADDR_BITS(PROGRAM_MEM_ADDR_BITS)
+            .PROGRAM_MEM_ADDR_BITS(PROGRAM_MEM_ADDR_BITS),
+            .WARPS_PER_CORE(WARPS_PER_CORE)
         ) pc_instance (
             .clk(clk),
             .reset(reset),
@@ -225,7 +242,10 @@ module core #(
             .decoded_nzp(decoded_nzp),
             .decoded_immediate(decoded_immediate),
             .decoded_nzp_write_enable(decoded_nzp_write_enable),
+            .warp(warp), // Pass the current warp ID to the PC module
             .decoded_pc_mux(decoded_pc_mux),
+            .rejoin_event(rejoin_event),
+            .rejoin_event_pc(rejoin_event_pc),
             .alu_out(alu_out_computes[i]),    // Fixed: was warpgroups[warp][i]
             .current_pc(current_pc),
             .next_pc(next_pc[i])                         // next_pc is sized [THREADS_PER_WARP-1:0], so local index i is correct
@@ -240,7 +260,7 @@ module core #(
             ) register_instance (
                 .clk(clk),
                 .reset(reset),
-                .enable(u < thread_count &&  (Running_Threads[0] == u || Running_Threads[1] == u)), // Only enable registers for active threads in the block
+                .enable(u < thread_count ), // Only enable registers for active threads in the block
                 .block_id(block_id),
                 .core_state(core_state),
                 .decoded_reg_write_enable(decoded_reg_write_enable),

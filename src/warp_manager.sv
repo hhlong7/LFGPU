@@ -16,18 +16,35 @@
 module warp_manager #(
     parameter THREADS_PER_WARP = 2,
     parameter THREADS_PER_BLOCK = 4,
-    parameter WARPS_PER_CORE = 2
+    parameter WARPS_PER_CORE = 2,
+    parameter DATA_MEM_DATA_BITS = 8
     )(
     input wire clk,
     input wire reset,
     input wire start,
-    //input reg [WARPS_PER_CORE:0] done,
+    input reg [$clog2(THREADS_PER_BLOCK):0] thread_count,
+
+    // input reg [WARPS_PER_CORE:0] done,
+    input wire [3:0] warp,
     input wire [7:0] warps_states [WARPS_PER_CORE-1:0],
     input wire [1:0] warp_status [WARPS_PER_CORE-1:0],
+    
+
+
+    // Divergence and Rejoin Events
+    input wire [7:0] next_pcs [THREADS_PER_WARP-1:0],
+    input reg [2:0] core_state, // State of the core to determine when to push/pop the stack
+    input reg divergence_event, // Signal indicating a divergence event (e.g., branch instruction)
+    input reg rejoin_event, // Signal indicating a rejoin event (e.g., reconvergence point)
+    input reg [DATA_MEM_DATA_BITS-1:0] decoded_immediate,
+    output reg [7:0] rejoin_event_pc, // The PC to rejoin to on a JOINER instruction after divergence
+
+    output reg empty,
     output reg [THREADS_PER_WARP-1:0] masks [WARPS_PER_CORE-1:0],
+    output reg [THREADS_PER_WARP-1:0] head,
     output reg [3:0] warp_ids [THREADS_PER_BLOCK-1:0],
     output reg [$clog2(THREADS_PER_BLOCK):0] warp_groups[0:WARPS_PER_CORE-1][0:THREADS_PER_WARP-1],
-    input reg [$clog2(THREADS_PER_BLOCK):0] thread_count,
+    
 
     output reg done,
     output wire [7:0] total_warps
@@ -41,11 +58,46 @@ module warp_manager #(
     reg [7:0] warps_done; // How many blocks have finished processing?
     reg start_execution; // EDA: Unimportant hack used because of EDA tooling
 
+
+    /**************************************************************************************************************
+     * These are the signals that are required for the divergence stack module
+     * warp_next_mask is the mask of that the warp will use next afters and convergence event occurs
+    ***************************************************************************************************************/
+    reg [THREADS_PER_WARP-1:0] warp_next_mask;
+    reg [THREADS_PER_WARP-1:0] head_next; // This is used to keep track of which thread in the warp is the next one to execute after a divergence event (used for indexing into next_pc)
+    reg [THREADS_PER_WARP-1:0] current_mask;
+    reg [THREADS_PER_WARP-1:0] rejoining_threads_mask;
+    reg [THREADS_PER_WARP-1:0] rejoin_event_head; // The head to rejoin to on a JOINER instruction after divergence
+     // Signal to indicate if the divergence stack is empty (no active divergences)
+    genvar i;
+    generate
+        for (i = 0; i < WARPS_PER_CORE; i = i + 1) begin : divergence_stack_gen
+            divergence_stack #(THREADS_PER_WARP, THREADS_PER_BLOCK, WARPS_PER_CORE) divergence_stack_inst (
+                .clk(clk),
+                .reset(reset),
+                .enable(i == warp),
+                .warp_next_mask(warp_next_mask),
+                .head_next(head_next),
+                .next_pc(decoded_immediate),
+                .divergence_event(divergence_event),
+                .rejoin_event(rejoin_event),
+                .core_state(core_state),
+                .rejoining_threads_mask(rejoining_threads_mask),
+                .rejoining_head(rejoin_event_head),
+                .rejoining_pc(rejoin_event_pc),
+                .empty(empty)
+            );
+        end
+    endgenerate
+
     always @(posedge clk) begin
         if (reset) begin
             warps_done <= 0;
             start_execution <=0;
             done <=0;
+            head <= 0;
+            head_next <= 0;
+            warp_next_mask <= {THREADS_PER_WARP{1'b0}};
             for (int i = 0; i < WARPS_PER_CORE; i++) begin
                 masks[i] <= 4'b1111;
                 done_warps[i] <= 0;
@@ -84,6 +136,36 @@ module warp_manager #(
                     done_warps[i] <= 1;
                 end
             end
+            if (divergence_event && core_state == 3'b110) begin
+                // Handle divergence event (e.g., update masks for the affected warp)
+                // This is a placeholder for the actual logic to handle divergence
+                // You would need to determine which threads are diverging and update the masks accordingly
+                warp_next_mask <= {THREADS_PER_WARP{1'b0}};
+                //current_mask <= masks[warp_ids[warp]];
+                for (int i =1; i < THREADS_PER_WARP; i++) begin
+                    if (next_pcs[i] == decoded_immediate) begin
+                        head_next <= i;
+                        warp_next_mask[i] <= 1; // Update the next mask for the diverging thread
+                        masks[warp][i] <= 0; // Disable the diverging thread in the mask
+                    end
+                    else begin
+                        if (masks[warp][i] == 1) // Keep the other threads' mask values the same
+                        begin
+                            head <= i;
+                        end
+                    end
+                end
+            end
+            if (rejoin_event && core_state == 3'b101) begin
+                // Handle rejoin event (e.g., update masks to allow diverged threads to rejoin)
+                // This is a placeholder for the actual logic to handle rejoin
+                // You would need to determine which threads are rejoining and update the masks accordingly
+                // Pop the divergence stack to get the previous mask and update accordingly
+
+                masks[warp] <= rejoining_threads_mask; // Update the mask for the rejoining thread
+                head <= rejoin_event_head;
+            end
+        
         end
     end
 endmodule

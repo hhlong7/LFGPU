@@ -16,7 +16,8 @@
 module warp_scheduler #(
     parameter THREADS_PER_BLOCK = 4,
     parameter THREADS_PER_WARP = 2,
-    parameter WARPS_PER_CORE = 2
+    parameter WARPS_PER_CORE = 2,
+    parameter DATA_MEM_DATA_BITS = 8
 ) (
     input wire clk,
     input wire reset,
@@ -31,6 +32,12 @@ module warp_scheduler #(
     // Memory Access State
     input reg [2:0] fetcher_state,
     input reg [1:0] lsu_state [THREADS_PER_WARP-1:0],
+
+    // Divergence and Rejoin Events
+    input reg divergence_event, // Signal indicating a divergence event (e.g., branch instruction)
+    input reg rejoin_event, // Signal indicating a rejoin event (e.g., reconvergence point)
+    input reg [DATA_MEM_DATA_BITS-1:0] decoded_immediate,
+    output reg [7:0] rejoin_event_pc, // The PC to rejoin to on a JOINER instruction after divergence
 
     //TODO: warp output controlls, need to be able send out warp masks
     // needs to get back when a warp is finished executing in the pipeline
@@ -62,6 +69,11 @@ module warp_scheduler #(
     //Thread Meta Data
     reg [7:0] thread_pcs[THREADS_PER_BLOCK-1:0];
 
+    // Warp Count
+    reg warp_count;
+    reg [THREADS_PER_WARP-1:0] head;    
+    reg empty;
+    
     localparam 
         READY = 2'b00, // Ready to be swaped to
         STALL = 2'b01,       // Warp is currently Stalled
@@ -85,13 +97,24 @@ module warp_scheduler #(
         .clk(clk),
         .reset(reset),
         .start(start),
+        .thread_count(thread_count),
+        .warp(warp),
+        .core_state(core_state),
         .warps_states(warps_states),
         .warp_status(warp_status),
-        .done(done),
+        .divergence_event(divergence_event),
+        .rejoin_event(rejoin_event),
+        .next_pcs(next_pc),
+        .decoded_immediate(decoded_immediate),
+        .rejoin_event_pc(rejoin_event_pc),
+        
+        .empty(empty),
+        .masks(masks),
+        .head(head),
         .warp_ids(warp_ids),
         .warp_groups(warp_groups),
-        .masks(masks),
-        .thread_count(thread_count),
+        
+        .done(done),
         .total_warps(total_warps)
     );
 
@@ -145,12 +168,12 @@ module warp_scheduler #(
                 IDLE: begin
                     // Here after reset (before kernel is launched, or after previous block has been processed)
                     if (start) begin 
-                        warp <= 0;
-                        current_pc <=warp_pcs[0];
-                        core_state <= warps_states[0];
-                        warp_status[0] <= STALL;
-                        warps_ready[0] <= 0;
-                        next_warp <= (next_warp == total_warps) ? 0 : next_warp+1;
+                        warp <= next_warp;
+                        current_pc <=warp_pcs[next_warp];
+                        core_state <= warps_states[next_warp];
+                        warp_status[next_warp] <= STALL;
+                        warps_ready[next_warp] <= 0;
+                        next_warp <= (next_warp == total_warps-1) ? 0 : next_warp+1;
                     end
                 end
                 FETCH: begin 
@@ -173,6 +196,7 @@ module warp_scheduler #(
                     //     //     end
                     //     // end 
                     // end
+                    
                     if (fetcher_state == 3'b010) begin 
                         core_state <= DECODE;
                     end
@@ -210,24 +234,23 @@ module warp_scheduler #(
                         // If we reach a RET instruction, this block is done executing
                         warps_states[warp] <= DONE;
                         warps_ready[warp] <= 0;
-                    end else begin
-                        // TODO: Branch divergence. For now assume all next_pc converge
+                    end else if (rejoin_event && !empty) begin 
                         warp_status[warp] <= READY;
-                        warp_pcs[warp] <= next_pc[0];
+                        warp_pcs[warp] <= rejoin_event_pc;
                         warps_ready[warp] <= 1;
                         warps_states[warp] <= FETCH;
                     end
-                    warps_ready <= (warps_ready << 1) | (warps_ready >> (WARPS_PER_CORE-1));       //rsl
-                    // Update is synchronous so we move on after one cycle
-                    for (int i = 0; i < WARPS_PER_CORE; i++)begin
-                            if ((warp_status[i] == READY) && (warps_ready >> i == 1'b1))begin
-                            warp <= i;
-                            current_pc <=warp_pcs[i];
-                            core_state <= warps_states[i];
-                            warp_status[i] <= STALL;
-                            // next_warp <= (next_warp == total_warps-1) ? 0 : next_warp+1;
-                        end
+                    else begin
+                        // TODO: Branch divergence. For now assume all next_pc converge
+                        warp_status[warp] <= READY;
+                        warp_pcs[warp] <= next_pc[head];
+                        warps_ready[warp] <= 1;
+                        warps_states[warp] <= FETCH;
                     end
+                    //warps_ready <= (warps_ready << next_warp) | (warps_ready >> (WARPS_PER_CORE-next_warp));       //rsl
+                    core_state <= IDLE;
+                    // Update is synchronous so we move on after one cycle
+                    
                 end
                 DONE: begin 
                     // no-op

@@ -21,6 +21,15 @@ async def test_matadd_32_threads(dut):
 
     verify_matadd(test_conf, data_memory)
 
+@cocotb.test
+async def test_matadd_8_threads_branch(dut):
+    test_conf = load_json_binary(
+        "./tiny-gpu-assembler/asm_build/test_matadd.json")
+
+    data_memory = await setup_wrap(dut, test_conf)
+
+    verify_matadd(test_conf, data_memory)
+
 
 def verify_matadd(test_conf, data_memory):
 

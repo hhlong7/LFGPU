@@ -29,10 +29,13 @@ module decoder (
     output reg decoded_pc_mux,                     // Select source of next PC
 
     // Return (finished executing thread)
-    output reg decoded_ret
+    output reg decoded_ret,
+    output reg rejoin_event,
+    output reg divergence_event
 );
     localparam NOP = 4'b0000,
         BRnzp = 4'b0001,
+        JOINER = 4'b1011,
         CMP = 4'b0010,
         ADD = 4'b0011,
         SUB = 4'b0100,
@@ -79,6 +82,8 @@ module decoder (
                 decoded_alu_output_mux <= 0;
                 decoded_pc_mux <= 0;
                 decoded_ret <= 0;
+                rejoin_event <= 0;
+                divergence_event <= 0;
 
                 // Set the control signals for each instruction
                 case (instruction[15:12])
@@ -87,6 +92,11 @@ module decoder (
                     end
                     BRnzp: begin 
                         decoded_pc_mux <= 1;
+                        divergence_event <= 1; // EDA: Unimportant hack used because of EDA tooling
+                    end
+                    JOINER: begin 
+                        rejoin_event <= 1; // EDA: Unimportant hack used because of EDA tooling
+                        decoded_pc_mux <= 1; // EDA: Unimportant hack used because of EDA tooling
                     end
                     CMP: begin 
                         decoded_alu_output_mux <= 1;

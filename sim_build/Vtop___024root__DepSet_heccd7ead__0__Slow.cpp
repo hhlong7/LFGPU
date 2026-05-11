@@ -224,22 +224,22 @@ VL_ATTR_COLD void Vtop___024root___ctor_var_reset(Vtop___024root* vlSelf) {
     for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
         vlSelf->gpu__DOT__core_thread_count[__Vi0] = VL_RAND_RESET_I(3);
     }
-    vlSelf->gpu__DOT__lsu_read_valid = VL_RAND_RESET_I(4);
-    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
+    vlSelf->gpu__DOT__lsu_read_valid = VL_RAND_RESET_I(8);
+    for (int __Vi0 = 0; __Vi0 < 8; ++__Vi0) {
         vlSelf->gpu__DOT__lsu_read_address[__Vi0] = VL_RAND_RESET_I(8);
     }
-    vlSelf->gpu__DOT__lsu_read_ready = VL_RAND_RESET_I(4);
-    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
+    vlSelf->gpu__DOT__lsu_read_ready = VL_RAND_RESET_I(8);
+    for (int __Vi0 = 0; __Vi0 < 8; ++__Vi0) {
         vlSelf->gpu__DOT__lsu_read_data[__Vi0] = VL_RAND_RESET_I(8);
     }
-    vlSelf->gpu__DOT__lsu_write_valid = VL_RAND_RESET_I(4);
-    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
+    vlSelf->gpu__DOT__lsu_write_valid = VL_RAND_RESET_I(8);
+    for (int __Vi0 = 0; __Vi0 < 8; ++__Vi0) {
         vlSelf->gpu__DOT__lsu_write_address[__Vi0] = VL_RAND_RESET_I(8);
     }
-    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
+    for (int __Vi0 = 0; __Vi0 < 8; ++__Vi0) {
         vlSelf->gpu__DOT__lsu_write_data[__Vi0] = VL_RAND_RESET_I(8);
     }
-    vlSelf->gpu__DOT__lsu_write_ready = VL_RAND_RESET_I(4);
+    vlSelf->gpu__DOT__lsu_write_ready = VL_RAND_RESET_I(8);
     vlSelf->gpu__DOT__fetcher_read_valid = VL_RAND_RESET_I(2);
     for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
         vlSelf->gpu__DOT__fetcher_read_address[__Vi0] = VL_RAND_RESET_I(8);
@@ -248,38 +248,38 @@ VL_ATTR_COLD void Vtop___024root___ctor_var_reset(Vtop___024root* vlSelf) {
     for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
         vlSelf->gpu__DOT__fetcher_read_data[__Vi0] = VL_RAND_RESET_I(16);
     }
-    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_lsu_read_valid = VL_RAND_RESET_I(2);
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_lsu_read_valid = VL_RAND_RESET_I(4);
+    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_lsu_read_address[__Vi0] = VL_RAND_RESET_I(8);
     }
-    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_lsu_read_ready = VL_RAND_RESET_I(2);
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_lsu_read_ready = VL_RAND_RESET_I(4);
+    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_lsu_read_data[__Vi0] = VL_RAND_RESET_I(8);
     }
-    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_lsu_write_valid = VL_RAND_RESET_I(2);
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_lsu_write_valid = VL_RAND_RESET_I(4);
+    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_lsu_write_address[__Vi0] = VL_RAND_RESET_I(8);
     }
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
+    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_lsu_write_data[__Vi0] = VL_RAND_RESET_I(8);
     }
-    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_lsu_write_ready = VL_RAND_RESET_I(2);
-    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_lsu_read_valid = VL_RAND_RESET_I(2);
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_lsu_write_ready = VL_RAND_RESET_I(4);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_lsu_read_valid = VL_RAND_RESET_I(4);
+    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_lsu_read_address[__Vi0] = VL_RAND_RESET_I(8);
     }
-    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_lsu_read_ready = VL_RAND_RESET_I(2);
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_lsu_read_ready = VL_RAND_RESET_I(4);
+    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_lsu_read_data[__Vi0] = VL_RAND_RESET_I(8);
     }
-    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_lsu_write_valid = VL_RAND_RESET_I(2);
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_lsu_write_valid = VL_RAND_RESET_I(4);
+    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_lsu_write_address[__Vi0] = VL_RAND_RESET_I(8);
     }
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
+    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_lsu_write_data[__Vi0] = VL_RAND_RESET_I(8);
     }
-    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_lsu_write_ready = VL_RAND_RESET_I(2);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_lsu_write_ready = VL_RAND_RESET_I(4);
     vlSelf->gpu__DOT__dcr_instance__DOT__clk = VL_RAND_RESET_I(1);
     vlSelf->gpu__DOT__dcr_instance__DOT__reset = VL_RAND_RESET_I(1);
     vlSelf->gpu__DOT__dcr_instance__DOT__device_control_write_enable = VL_RAND_RESET_I(1);
@@ -288,22 +288,22 @@ VL_ATTR_COLD void Vtop___024root___ctor_var_reset(Vtop___024root* vlSelf) {
     vlSelf->gpu__DOT__dcr_instance__DOT__device_conrol_register = VL_RAND_RESET_I(8);
     vlSelf->gpu__DOT__data_memory_controller__DOT__clk = VL_RAND_RESET_I(1);
     vlSelf->gpu__DOT__data_memory_controller__DOT__reset = VL_RAND_RESET_I(1);
-    vlSelf->gpu__DOT__data_memory_controller__DOT__consumer_read_valid = VL_RAND_RESET_I(4);
-    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
+    vlSelf->gpu__DOT__data_memory_controller__DOT__consumer_read_valid = VL_RAND_RESET_I(8);
+    for (int __Vi0 = 0; __Vi0 < 8; ++__Vi0) {
         vlSelf->gpu__DOT__data_memory_controller__DOT__consumer_read_address[__Vi0] = VL_RAND_RESET_I(8);
     }
-    vlSelf->gpu__DOT__data_memory_controller__DOT__consumer_read_ready = VL_RAND_RESET_I(4);
-    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
+    vlSelf->gpu__DOT__data_memory_controller__DOT__consumer_read_ready = VL_RAND_RESET_I(8);
+    for (int __Vi0 = 0; __Vi0 < 8; ++__Vi0) {
         vlSelf->gpu__DOT__data_memory_controller__DOT__consumer_read_data[__Vi0] = VL_RAND_RESET_I(8);
     }
-    vlSelf->gpu__DOT__data_memory_controller__DOT__consumer_write_valid = VL_RAND_RESET_I(4);
-    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
+    vlSelf->gpu__DOT__data_memory_controller__DOT__consumer_write_valid = VL_RAND_RESET_I(8);
+    for (int __Vi0 = 0; __Vi0 < 8; ++__Vi0) {
         vlSelf->gpu__DOT__data_memory_controller__DOT__consumer_write_address[__Vi0] = VL_RAND_RESET_I(8);
     }
-    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
+    for (int __Vi0 = 0; __Vi0 < 8; ++__Vi0) {
         vlSelf->gpu__DOT__data_memory_controller__DOT__consumer_write_data[__Vi0] = VL_RAND_RESET_I(8);
     }
-    vlSelf->gpu__DOT__data_memory_controller__DOT__consumer_write_ready = VL_RAND_RESET_I(4);
+    vlSelf->gpu__DOT__data_memory_controller__DOT__consumer_write_ready = VL_RAND_RESET_I(8);
     vlSelf->gpu__DOT__data_memory_controller__DOT__mem_read_valid = VL_RAND_RESET_I(4);
     for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
         vlSelf->gpu__DOT__data_memory_controller__DOT__mem_read_address[__Vi0] = VL_RAND_RESET_I(8);
@@ -324,9 +324,9 @@ VL_ATTR_COLD void Vtop___024root___ctor_var_reset(Vtop___024root* vlSelf) {
         vlSelf->gpu__DOT__data_memory_controller__DOT__controller_state[__Vi0] = VL_RAND_RESET_I(3);
     }
     for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
-        vlSelf->gpu__DOT__data_memory_controller__DOT__current_consumer[__Vi0] = VL_RAND_RESET_I(2);
+        vlSelf->gpu__DOT__data_memory_controller__DOT__current_consumer[__Vi0] = VL_RAND_RESET_I(3);
     }
-    vlSelf->gpu__DOT__data_memory_controller__DOT__channel_serving_consumer = VL_RAND_RESET_I(4);
+    vlSelf->gpu__DOT__data_memory_controller__DOT__channel_serving_consumer = VL_RAND_RESET_I(8);
     vlSelf->gpu__DOT__data_memory_controller__DOT__unnamedblk1__DOT__i = 0;
     vlSelf->gpu__DOT__data_memory_controller__DOT__unnamedblk2__DOT__i = 0;
     vlSelf->gpu__DOT__data_memory_controller__DOT__unnamedblk2__DOT__unnamedblk3__DOT__j = 0;
@@ -415,46 +415,46 @@ VL_ATTR_COLD void Vtop___024root___ctor_var_reset(Vtop___024root* vlSelf) {
     vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__program_mem_read_address = VL_RAND_RESET_I(8);
     vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__program_mem_read_ready = VL_RAND_RESET_I(1);
     vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__program_mem_read_data = VL_RAND_RESET_I(16);
-    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__data_mem_read_valid = VL_RAND_RESET_I(2);
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__data_mem_read_valid = VL_RAND_RESET_I(4);
+    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__data_mem_read_address[__Vi0] = VL_RAND_RESET_I(8);
     }
-    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__data_mem_read_ready = VL_RAND_RESET_I(2);
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__data_mem_read_ready = VL_RAND_RESET_I(4);
+    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__data_mem_read_data[__Vi0] = VL_RAND_RESET_I(8);
     }
-    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__data_mem_write_valid = VL_RAND_RESET_I(2);
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__data_mem_write_valid = VL_RAND_RESET_I(4);
+    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__data_mem_write_address[__Vi0] = VL_RAND_RESET_I(8);
     }
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
+    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__data_mem_write_data[__Vi0] = VL_RAND_RESET_I(8);
     }
-    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__data_mem_write_ready = VL_RAND_RESET_I(2);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__data_mem_write_ready = VL_RAND_RESET_I(4);
     vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__core_state = VL_RAND_RESET_I(3);
     vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__fetcher_state = VL_RAND_RESET_I(3);
     vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__instruction = VL_RAND_RESET_I(16);
-    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warp_index = VL_RAND_RESET_I(2);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warp_index = VL_RAND_RESET_I(1);
     for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warp_ids[__Vi0] = VL_RAND_RESET_I(4);
     }
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
-        for (int __Vi1 = 0; __Vi1 < 2; ++__Vi1) {
+    for (int __Vi0 = 0; __Vi0 < 1; ++__Vi0) {
+        for (int __Vi1 = 0; __Vi1 < 4; ++__Vi1) {
             vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warp_groups[__Vi0][__Vi1] = VL_RAND_RESET_I(3);
         }
     }
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
-        vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__masks[__Vi0] = VL_RAND_RESET_I(2);
+    for (int __Vi0 = 0; __Vi0 < 1; ++__Vi0) {
+        vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__masks[__Vi0] = VL_RAND_RESET_I(4);
     }
     vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warp = VL_RAND_RESET_I(4);
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
+    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__Running_Threads[__Vi0] = VL_RAND_RESET_I(3);
     }
     vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__current_pc = VL_RAND_RESET_I(8);
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
+    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__next_pc[__Vi0] = VL_RAND_RESET_I(8);
     }
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
+    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__lsu_state[__Vi0] = VL_RAND_RESET_I(2);
     }
     for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
@@ -463,16 +463,16 @@ VL_ATTR_COLD void Vtop___024root___ctor_var_reset(Vtop___024root* vlSelf) {
     for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__rt_regs[__Vi0] = VL_RAND_RESET_I(8);
     }
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
+    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__lsu_out_computes[__Vi0] = VL_RAND_RESET_I(8);
     }
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
+    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__alu_out_computes[__Vi0] = VL_RAND_RESET_I(8);
     }
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
+    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__rs_computes[__Vi0] = VL_RAND_RESET_I(8);
     }
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
+    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__rt_computes[__Vi0] = VL_RAND_RESET_I(8);
     }
     for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
@@ -495,12 +495,10 @@ VL_ATTR_COLD void Vtop___024root___ctor_var_reset(Vtop___024root* vlSelf) {
     vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__decoded_alu_output_mux = VL_RAND_RESET_I(1);
     vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__decoded_pc_mux = VL_RAND_RESET_I(1);
     vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__decoded_ret = VL_RAND_RESET_I(1);
-    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT____Vcellinp__warps__BRA__0__KET____DOT__alu_instance__enable = VL_RAND_RESET_I(1);
-    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT____Vcellinp__warps__BRA__1__KET____DOT__alu_instance__enable = VL_RAND_RESET_I(1);
-    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT____Vcellinp__threads__BRA__0__KET____DOT__register_instance__enable = VL_RAND_RESET_I(1);
-    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT____Vcellinp__threads__BRA__1__KET____DOT__register_instance__enable = VL_RAND_RESET_I(1);
-    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT____Vcellinp__threads__BRA__2__KET____DOT__register_instance__enable = VL_RAND_RESET_I(1);
-    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT____Vcellinp__threads__BRA__3__KET____DOT__register_instance__enable = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__divergence_event = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__rejoin_event = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__rejoin_event_pc = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT____VdfgRegularize_h47660625_9_1 = VL_RAND_RESET_I(4);
     vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__fetcher_instance__DOT__clk = VL_RAND_RESET_I(1);
     vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__fetcher_instance__DOT__reset = VL_RAND_RESET_I(1);
     vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__fetcher_instance__DOT__core_state = VL_RAND_RESET_I(3);
@@ -529,6 +527,8 @@ VL_ATTR_COLD void Vtop___024root___ctor_var_reset(Vtop___024root* vlSelf) {
     vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__decoder_instance__DOT__decoded_alu_output_mux = VL_RAND_RESET_I(1);
     vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__decoder_instance__DOT__decoded_pc_mux = VL_RAND_RESET_I(1);
     vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__decoder_instance__DOT__decoded_ret = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__decoder_instance__DOT__rejoin_event = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__decoder_instance__DOT__divergence_event = VL_RAND_RESET_I(1);
     vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__clk = VL_RAND_RESET_I(1);
     vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__reset = VL_RAND_RESET_I(1);
     vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__start = VL_RAND_RESET_I(1);
@@ -537,74 +537,111 @@ VL_ATTR_COLD void Vtop___024root___ctor_var_reset(Vtop___024root* vlSelf) {
     vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__decoded_mem_write_enable = VL_RAND_RESET_I(1);
     vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__decoded_ret = VL_RAND_RESET_I(1);
     vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__fetcher_state = VL_RAND_RESET_I(3);
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
+    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__lsu_state[__Vi0] = VL_RAND_RESET_I(2);
     }
-    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_index = VL_RAND_RESET_I(2);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__divergence_event = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__rejoin_event = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__decoded_immediate = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__rejoin_event_pc = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_index = VL_RAND_RESET_I(1);
     for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_ids[__Vi0] = VL_RAND_RESET_I(4);
     }
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
-        for (int __Vi1 = 0; __Vi1 < 2; ++__Vi1) {
+    for (int __Vi0 = 0; __Vi0 < 1; ++__Vi0) {
+        for (int __Vi1 = 0; __Vi1 < 4; ++__Vi1) {
             vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_groups[__Vi0][__Vi1] = VL_RAND_RESET_I(3);
         }
     }
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
-        vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__masks[__Vi0] = VL_RAND_RESET_I(2);
+    for (int __Vi0 = 0; __Vi0 < 1; ++__Vi0) {
+        vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__masks[__Vi0] = VL_RAND_RESET_I(4);
     }
     vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__current_pc = VL_RAND_RESET_I(8);
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
+    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__next_pc[__Vi0] = VL_RAND_RESET_I(8);
     }
     vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__core_state = VL_RAND_RESET_I(3);
     vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp = VL_RAND_RESET_I(4);
     vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__done = VL_RAND_RESET_I(1);
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
+    for (int __Vi0 = 0; __Vi0 < 1; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warps_states[__Vi0] = VL_RAND_RESET_I(8);
     }
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
+    for (int __Vi0 = 0; __Vi0 < 1; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_status[__Vi0] = VL_RAND_RESET_I(2);
     }
-    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warps_ready = VL_RAND_RESET_I(2);
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warps_ready = VL_RAND_RESET_I(1);
+    for (int __Vi0 = 0; __Vi0 < 1; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_pcs[__Vi0] = VL_RAND_RESET_I(8);
     }
-    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__next_warp = VL_RAND_RESET_I(2);
-    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__start_warp = VL_RAND_RESET_I(3);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__next_warp = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__start_warp = VL_RAND_RESET_I(2);
     vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__total_warps = VL_RAND_RESET_I(8);
+    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
+        vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__thread_pcs[__Vi0] = VL_RAND_RESET_I(8);
+    }
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_count = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__head = VL_RAND_RESET_I(4);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__empty = VL_RAND_RESET_I(1);
     vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__unnamedblk1__DOT__i = 0;
     vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__unnamedblk2__DOT__any_lsu_waiting = VL_RAND_RESET_I(1);
     vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__unnamedblk2__DOT__unnamedblk3__DOT__i = 0;
-    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__unnamedblk4__DOT__i = 0;
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT____Vlvbound_hfb768481__0 = VL_RAND_RESET_I(2);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT____Vlvbound_h9de7772c__0 = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT____Vlvbound_h920e3ca9__0 = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT____Vlvbound_h39e7ab3d__0 = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT____Vlvbound_hbb256656__0 = VL_RAND_RESET_I(2);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT____Vlvbound_hfc72edf2__0 = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT____Vlvbound_h39e7ab3d__1 = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT____Vlvbound_h920e3ca9__1 = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT____Vlvbound_hbb256656__1 = VL_RAND_RESET_I(2);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT____Vlvbound_hfc72edf2__1 = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT____Vlvbound_h39e7ab3d__2 = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT____Vlvbound_h920e3ca9__2 = VL_RAND_RESET_I(8);
     vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__clk = VL_RAND_RESET_I(1);
     vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__reset = VL_RAND_RESET_I(1);
     vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__start = VL_RAND_RESET_I(1);
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__thread_count = VL_RAND_RESET_I(3);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__warp = VL_RAND_RESET_I(4);
+    for (int __Vi0 = 0; __Vi0 < 1; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__warps_states[__Vi0] = VL_RAND_RESET_I(8);
     }
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
+    for (int __Vi0 = 0; __Vi0 < 1; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__warp_status[__Vi0] = VL_RAND_RESET_I(2);
     }
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
-        vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__masks[__Vi0] = VL_RAND_RESET_I(2);
+    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
+        vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__next_pcs[__Vi0] = VL_RAND_RESET_I(8);
     }
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__core_state = VL_RAND_RESET_I(3);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__divergence_event = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__rejoin_event = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__decoded_immediate = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__rejoin_event_pc = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__empty = VL_RAND_RESET_I(1);
+    for (int __Vi0 = 0; __Vi0 < 1; ++__Vi0) {
+        vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__masks[__Vi0] = VL_RAND_RESET_I(4);
+    }
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__head = VL_RAND_RESET_I(4);
     for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__warp_ids[__Vi0] = VL_RAND_RESET_I(4);
     }
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
-        for (int __Vi1 = 0; __Vi1 < 2; ++__Vi1) {
+    for (int __Vi0 = 0; __Vi0 < 1; ++__Vi0) {
+        for (int __Vi1 = 0; __Vi1 < 4; ++__Vi1) {
             vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__warp_groups[__Vi0][__Vi1] = VL_RAND_RESET_I(3);
         }
     }
-    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__thread_count = VL_RAND_RESET_I(3);
     vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__done = VL_RAND_RESET_I(1);
     vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__total_warps = VL_RAND_RESET_I(8);
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
+    for (int __Vi0 = 0; __Vi0 < 1; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__done_warps[__Vi0] = VL_RAND_RESET_I(1);
     }
     vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__warps_dispatched = VL_RAND_RESET_I(8);
     vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__warps_done = VL_RAND_RESET_I(8);
     vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__start_execution = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__warp_next_mask = VL_RAND_RESET_I(4);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__head_next = VL_RAND_RESET_I(4);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__current_mask = VL_RAND_RESET_I(4);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__rejoining_threads_mask = VL_RAND_RESET_I(4);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__rejoin_event_head = VL_RAND_RESET_I(4);
     vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__unnamedblk1__DOT__i = 0;
     vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__unnamedblk2__DOT__i = 0;
     vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__unnamedblk3__DOT__i = 0;
@@ -612,6 +649,33 @@ VL_ATTR_COLD void Vtop___024root___ctor_var_reset(Vtop___024root* vlSelf) {
     vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__unnamedblk5__DOT__i = 0;
     vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__unnamedblk5__DOT__unnamedblk6__DOT__j = 0;
     vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__unnamedblk7__DOT__i = 0;
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__unnamedblk8__DOT__i = 0;
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT____Vlvbound_h698f6414__0 = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT____Vlvbound_he266a5c5__0 = VL_RAND_RESET_I(4);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__divergence_stack_gen__BRA__0__KET____DOT__divergence_stack_inst__DOT__clk = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__divergence_stack_gen__BRA__0__KET____DOT__divergence_stack_inst__DOT__reset = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__divergence_stack_gen__BRA__0__KET____DOT__divergence_stack_inst__DOT__enable = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__divergence_stack_gen__BRA__0__KET____DOT__divergence_stack_inst__DOT__warp_next_mask = VL_RAND_RESET_I(4);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__divergence_stack_gen__BRA__0__KET____DOT__divergence_stack_inst__DOT__head_next = VL_RAND_RESET_I(4);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__divergence_stack_gen__BRA__0__KET____DOT__divergence_stack_inst__DOT__next_pc = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__divergence_stack_gen__BRA__0__KET____DOT__divergence_stack_inst__DOT__divergence_event = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__divergence_stack_gen__BRA__0__KET____DOT__divergence_stack_inst__DOT__rejoin_event = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__divergence_stack_gen__BRA__0__KET____DOT__divergence_stack_inst__DOT__core_state = VL_RAND_RESET_I(3);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__divergence_stack_gen__BRA__0__KET____DOT__divergence_stack_inst__DOT__rejoining_threads_mask = VL_RAND_RESET_I(4);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__divergence_stack_gen__BRA__0__KET____DOT__divergence_stack_inst__DOT__rejoining_head = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__divergence_stack_gen__BRA__0__KET____DOT__divergence_stack_inst__DOT__rejoining_pc = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__divergence_stack_gen__BRA__0__KET____DOT__divergence_stack_inst__DOT__empty = VL_RAND_RESET_I(1);
+    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
+        vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__divergence_stack_gen__BRA__0__KET____DOT__divergence_stack_inst__DOT__divergence_stack[__Vi0] = VL_RAND_RESET_I(4);
+    }
+    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
+        vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__divergence_stack_gen__BRA__0__KET____DOT__divergence_stack_inst__DOT__pc_stack[__Vi0] = VL_RAND_RESET_I(8);
+    }
+    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
+        vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__divergence_stack_gen__BRA__0__KET____DOT__divergence_stack_inst__DOT__head_stack[__Vi0] = VL_RAND_RESET_I(4);
+    }
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__divergence_stack_gen__BRA__0__KET____DOT__divergence_stack_inst__DOT__stack_pointer = VL_RAND_RESET_I(4);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__divergence_stack_gen__BRA__0__KET____DOT__divergence_stack_inst__DOT__unnamedblk1__DOT__i = 0;
     vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warptothreadbus_instance__DOT__clk = VL_RAND_RESET_I(1);
     vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warptothreadbus_instance__DOT__reset = VL_RAND_RESET_I(1);
     vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warptothreadbus_instance__DOT__warp = VL_RAND_RESET_I(4);
@@ -621,19 +685,19 @@ VL_ATTR_COLD void Vtop___024root___ctor_var_reset(Vtop___024root* vlSelf) {
     for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warptothreadbus_instance__DOT__rt_regs[__Vi0] = VL_RAND_RESET_I(8);
     }
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
+    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warptothreadbus_instance__DOT__lsu_out_computes[__Vi0] = VL_RAND_RESET_I(8);
     }
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
+    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warptothreadbus_instance__DOT__alu_out_computes[__Vi0] = VL_RAND_RESET_I(8);
     }
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
+    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warptothreadbus_instance__DOT__Running_Threads[__Vi0] = VL_RAND_RESET_I(3);
     }
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
+    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warptothreadbus_instance__DOT__rs_computes[__Vi0] = VL_RAND_RESET_I(8);
     }
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
+    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warptothreadbus_instance__DOT__rt_computes[__Vi0] = VL_RAND_RESET_I(8);
     }
     for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
@@ -681,6 +745,9 @@ VL_ATTR_COLD void Vtop___024root___ctor_var_reset(Vtop___024root* vlSelf) {
     vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__0__KET____DOT__pc_instance__DOT__decoded_immediate = VL_RAND_RESET_I(8);
     vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__0__KET____DOT__pc_instance__DOT__decoded_nzp_write_enable = VL_RAND_RESET_I(1);
     vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__0__KET____DOT__pc_instance__DOT__decoded_pc_mux = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__0__KET____DOT__pc_instance__DOT__warp = VL_RAND_RESET_I(2);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__0__KET____DOT__pc_instance__DOT__rejoin_event = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__0__KET____DOT__pc_instance__DOT__rejoin_event_pc = VL_RAND_RESET_I(8);
     vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__0__KET____DOT__pc_instance__DOT__alu_out = VL_RAND_RESET_I(8);
     vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__0__KET____DOT__pc_instance__DOT__current_pc = VL_RAND_RESET_I(8);
     vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__0__KET____DOT__pc_instance__DOT__next_pc = VL_RAND_RESET_I(8);
@@ -721,10 +788,99 @@ VL_ATTR_COLD void Vtop___024root___ctor_var_reset(Vtop___024root* vlSelf) {
     vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__1__KET____DOT__pc_instance__DOT__decoded_immediate = VL_RAND_RESET_I(8);
     vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__1__KET____DOT__pc_instance__DOT__decoded_nzp_write_enable = VL_RAND_RESET_I(1);
     vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__1__KET____DOT__pc_instance__DOT__decoded_pc_mux = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__1__KET____DOT__pc_instance__DOT__warp = VL_RAND_RESET_I(2);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__1__KET____DOT__pc_instance__DOT__rejoin_event = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__1__KET____DOT__pc_instance__DOT__rejoin_event_pc = VL_RAND_RESET_I(8);
     vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__1__KET____DOT__pc_instance__DOT__alu_out = VL_RAND_RESET_I(8);
     vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__1__KET____DOT__pc_instance__DOT__current_pc = VL_RAND_RESET_I(8);
     vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__1__KET____DOT__pc_instance__DOT__next_pc = VL_RAND_RESET_I(8);
     vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__1__KET____DOT__pc_instance__DOT__nzp = VL_RAND_RESET_I(3);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__alu_instance__DOT__clk = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__alu_instance__DOT__reset = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__alu_instance__DOT__enable = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__alu_instance__DOT__core_state = VL_RAND_RESET_I(3);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__alu_instance__DOT__decoded_alu_arithmetic_mux = VL_RAND_RESET_I(2);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__alu_instance__DOT__decoded_alu_output_mux = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__alu_instance__DOT__rs = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__alu_instance__DOT__rt = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__alu_instance__DOT__alu_out = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__alu_instance__DOT__alu_out_reg = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__lsu_instance__DOT__clk = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__lsu_instance__DOT__reset = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__lsu_instance__DOT__enable = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__lsu_instance__DOT__core_state = VL_RAND_RESET_I(3);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__lsu_instance__DOT__decoded_mem_read_enable = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__lsu_instance__DOT__decoded_mem_write_enable = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__lsu_instance__DOT__rs = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__lsu_instance__DOT__rt = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__lsu_instance__DOT__mem_read_valid = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__lsu_instance__DOT__mem_read_address = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__lsu_instance__DOT__mem_read_ready = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__lsu_instance__DOT__mem_read_data = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__lsu_instance__DOT__mem_write_valid = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__lsu_instance__DOT__mem_write_address = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__lsu_instance__DOT__mem_write_data = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__lsu_instance__DOT__mem_write_ready = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__lsu_instance__DOT__lsu_state = VL_RAND_RESET_I(2);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__lsu_instance__DOT__lsu_out = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__pc_instance__DOT__clk = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__pc_instance__DOT__reset = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__pc_instance__DOT__enable = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__pc_instance__DOT__core_state = VL_RAND_RESET_I(3);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__pc_instance__DOT__decoded_nzp = VL_RAND_RESET_I(3);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__pc_instance__DOT__decoded_immediate = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__pc_instance__DOT__decoded_nzp_write_enable = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__pc_instance__DOT__decoded_pc_mux = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__pc_instance__DOT__warp = VL_RAND_RESET_I(2);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__pc_instance__DOT__rejoin_event = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__pc_instance__DOT__rejoin_event_pc = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__pc_instance__DOT__alu_out = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__pc_instance__DOT__current_pc = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__pc_instance__DOT__next_pc = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__pc_instance__DOT__nzp = VL_RAND_RESET_I(3);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__alu_instance__DOT__clk = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__alu_instance__DOT__reset = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__alu_instance__DOT__enable = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__alu_instance__DOT__core_state = VL_RAND_RESET_I(3);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__alu_instance__DOT__decoded_alu_arithmetic_mux = VL_RAND_RESET_I(2);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__alu_instance__DOT__decoded_alu_output_mux = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__alu_instance__DOT__rs = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__alu_instance__DOT__rt = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__alu_instance__DOT__alu_out = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__alu_instance__DOT__alu_out_reg = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__lsu_instance__DOT__clk = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__lsu_instance__DOT__reset = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__lsu_instance__DOT__enable = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__lsu_instance__DOT__core_state = VL_RAND_RESET_I(3);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__lsu_instance__DOT__decoded_mem_read_enable = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__lsu_instance__DOT__decoded_mem_write_enable = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__lsu_instance__DOT__rs = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__lsu_instance__DOT__rt = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__lsu_instance__DOT__mem_read_valid = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__lsu_instance__DOT__mem_read_address = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__lsu_instance__DOT__mem_read_ready = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__lsu_instance__DOT__mem_read_data = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__lsu_instance__DOT__mem_write_valid = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__lsu_instance__DOT__mem_write_address = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__lsu_instance__DOT__mem_write_data = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__lsu_instance__DOT__mem_write_ready = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__lsu_instance__DOT__lsu_state = VL_RAND_RESET_I(2);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__lsu_instance__DOT__lsu_out = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__pc_instance__DOT__clk = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__pc_instance__DOT__reset = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__pc_instance__DOT__enable = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__pc_instance__DOT__core_state = VL_RAND_RESET_I(3);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__pc_instance__DOT__decoded_nzp = VL_RAND_RESET_I(3);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__pc_instance__DOT__decoded_immediate = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__pc_instance__DOT__decoded_nzp_write_enable = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__pc_instance__DOT__decoded_pc_mux = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__pc_instance__DOT__warp = VL_RAND_RESET_I(2);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__pc_instance__DOT__rejoin_event = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__pc_instance__DOT__rejoin_event_pc = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__pc_instance__DOT__alu_out = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__pc_instance__DOT__current_pc = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__pc_instance__DOT__next_pc = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__pc_instance__DOT__nzp = VL_RAND_RESET_I(3);
     vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__threads__BRA__0__KET____DOT__register_instance__DOT__clk = VL_RAND_RESET_I(1);
     vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__threads__BRA__0__KET____DOT__register_instance__DOT__reset = VL_RAND_RESET_I(1);
     vlSelf->gpu__DOT__cores__BRA__0__KET____DOT__core_instance__DOT__threads__BRA__0__KET____DOT__register_instance__DOT__enable = VL_RAND_RESET_I(1);
@@ -807,46 +963,46 @@ VL_ATTR_COLD void Vtop___024root___ctor_var_reset(Vtop___024root* vlSelf) {
     vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__program_mem_read_address = VL_RAND_RESET_I(8);
     vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__program_mem_read_ready = VL_RAND_RESET_I(1);
     vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__program_mem_read_data = VL_RAND_RESET_I(16);
-    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__data_mem_read_valid = VL_RAND_RESET_I(2);
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__data_mem_read_valid = VL_RAND_RESET_I(4);
+    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__data_mem_read_address[__Vi0] = VL_RAND_RESET_I(8);
     }
-    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__data_mem_read_ready = VL_RAND_RESET_I(2);
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__data_mem_read_ready = VL_RAND_RESET_I(4);
+    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__data_mem_read_data[__Vi0] = VL_RAND_RESET_I(8);
     }
-    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__data_mem_write_valid = VL_RAND_RESET_I(2);
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__data_mem_write_valid = VL_RAND_RESET_I(4);
+    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__data_mem_write_address[__Vi0] = VL_RAND_RESET_I(8);
     }
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
+    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__data_mem_write_data[__Vi0] = VL_RAND_RESET_I(8);
     }
-    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__data_mem_write_ready = VL_RAND_RESET_I(2);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__data_mem_write_ready = VL_RAND_RESET_I(4);
     vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__core_state = VL_RAND_RESET_I(3);
     vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__fetcher_state = VL_RAND_RESET_I(3);
     vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__instruction = VL_RAND_RESET_I(16);
-    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warp_index = VL_RAND_RESET_I(2);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warp_index = VL_RAND_RESET_I(1);
     for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warp_ids[__Vi0] = VL_RAND_RESET_I(4);
     }
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
-        for (int __Vi1 = 0; __Vi1 < 2; ++__Vi1) {
+    for (int __Vi0 = 0; __Vi0 < 1; ++__Vi0) {
+        for (int __Vi1 = 0; __Vi1 < 4; ++__Vi1) {
             vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warp_groups[__Vi0][__Vi1] = VL_RAND_RESET_I(3);
         }
     }
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
-        vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__masks[__Vi0] = VL_RAND_RESET_I(2);
+    for (int __Vi0 = 0; __Vi0 < 1; ++__Vi0) {
+        vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__masks[__Vi0] = VL_RAND_RESET_I(4);
     }
     vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warp = VL_RAND_RESET_I(4);
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
+    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__Running_Threads[__Vi0] = VL_RAND_RESET_I(3);
     }
     vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__current_pc = VL_RAND_RESET_I(8);
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
+    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__next_pc[__Vi0] = VL_RAND_RESET_I(8);
     }
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
+    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__lsu_state[__Vi0] = VL_RAND_RESET_I(2);
     }
     for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
@@ -855,16 +1011,16 @@ VL_ATTR_COLD void Vtop___024root___ctor_var_reset(Vtop___024root* vlSelf) {
     for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__rt_regs[__Vi0] = VL_RAND_RESET_I(8);
     }
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
+    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__lsu_out_computes[__Vi0] = VL_RAND_RESET_I(8);
     }
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
+    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__alu_out_computes[__Vi0] = VL_RAND_RESET_I(8);
     }
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
+    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__rs_computes[__Vi0] = VL_RAND_RESET_I(8);
     }
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
+    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__rt_computes[__Vi0] = VL_RAND_RESET_I(8);
     }
     for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
@@ -887,12 +1043,10 @@ VL_ATTR_COLD void Vtop___024root___ctor_var_reset(Vtop___024root* vlSelf) {
     vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__decoded_alu_output_mux = VL_RAND_RESET_I(1);
     vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__decoded_pc_mux = VL_RAND_RESET_I(1);
     vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__decoded_ret = VL_RAND_RESET_I(1);
-    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT____Vcellinp__warps__BRA__0__KET____DOT__alu_instance__enable = VL_RAND_RESET_I(1);
-    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT____Vcellinp__warps__BRA__1__KET____DOT__alu_instance__enable = VL_RAND_RESET_I(1);
-    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT____Vcellinp__threads__BRA__0__KET____DOT__register_instance__enable = VL_RAND_RESET_I(1);
-    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT____Vcellinp__threads__BRA__1__KET____DOT__register_instance__enable = VL_RAND_RESET_I(1);
-    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT____Vcellinp__threads__BRA__2__KET____DOT__register_instance__enable = VL_RAND_RESET_I(1);
-    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT____Vcellinp__threads__BRA__3__KET____DOT__register_instance__enable = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__divergence_event = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__rejoin_event = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__rejoin_event_pc = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT____VdfgRegularize_h47660625_9_1 = VL_RAND_RESET_I(4);
     vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__fetcher_instance__DOT__clk = VL_RAND_RESET_I(1);
     vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__fetcher_instance__DOT__reset = VL_RAND_RESET_I(1);
     vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__fetcher_instance__DOT__core_state = VL_RAND_RESET_I(3);
@@ -921,6 +1075,8 @@ VL_ATTR_COLD void Vtop___024root___ctor_var_reset(Vtop___024root* vlSelf) {
     vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__decoder_instance__DOT__decoded_alu_output_mux = VL_RAND_RESET_I(1);
     vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__decoder_instance__DOT__decoded_pc_mux = VL_RAND_RESET_I(1);
     vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__decoder_instance__DOT__decoded_ret = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__decoder_instance__DOT__rejoin_event = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__decoder_instance__DOT__divergence_event = VL_RAND_RESET_I(1);
     vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__clk = VL_RAND_RESET_I(1);
     vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__reset = VL_RAND_RESET_I(1);
     vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__start = VL_RAND_RESET_I(1);
@@ -929,74 +1085,111 @@ VL_ATTR_COLD void Vtop___024root___ctor_var_reset(Vtop___024root* vlSelf) {
     vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__decoded_mem_write_enable = VL_RAND_RESET_I(1);
     vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__decoded_ret = VL_RAND_RESET_I(1);
     vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__fetcher_state = VL_RAND_RESET_I(3);
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
+    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__lsu_state[__Vi0] = VL_RAND_RESET_I(2);
     }
-    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_index = VL_RAND_RESET_I(2);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__divergence_event = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__rejoin_event = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__decoded_immediate = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__rejoin_event_pc = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_index = VL_RAND_RESET_I(1);
     for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_ids[__Vi0] = VL_RAND_RESET_I(4);
     }
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
-        for (int __Vi1 = 0; __Vi1 < 2; ++__Vi1) {
+    for (int __Vi0 = 0; __Vi0 < 1; ++__Vi0) {
+        for (int __Vi1 = 0; __Vi1 < 4; ++__Vi1) {
             vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_groups[__Vi0][__Vi1] = VL_RAND_RESET_I(3);
         }
     }
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
-        vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__masks[__Vi0] = VL_RAND_RESET_I(2);
+    for (int __Vi0 = 0; __Vi0 < 1; ++__Vi0) {
+        vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__masks[__Vi0] = VL_RAND_RESET_I(4);
     }
     vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__current_pc = VL_RAND_RESET_I(8);
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
+    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__next_pc[__Vi0] = VL_RAND_RESET_I(8);
     }
     vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__core_state = VL_RAND_RESET_I(3);
     vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp = VL_RAND_RESET_I(4);
     vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__done = VL_RAND_RESET_I(1);
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
+    for (int __Vi0 = 0; __Vi0 < 1; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warps_states[__Vi0] = VL_RAND_RESET_I(8);
     }
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
+    for (int __Vi0 = 0; __Vi0 < 1; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_status[__Vi0] = VL_RAND_RESET_I(2);
     }
-    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warps_ready = VL_RAND_RESET_I(2);
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warps_ready = VL_RAND_RESET_I(1);
+    for (int __Vi0 = 0; __Vi0 < 1; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_pcs[__Vi0] = VL_RAND_RESET_I(8);
     }
-    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__next_warp = VL_RAND_RESET_I(2);
-    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__start_warp = VL_RAND_RESET_I(3);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__next_warp = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__start_warp = VL_RAND_RESET_I(2);
     vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__total_warps = VL_RAND_RESET_I(8);
+    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
+        vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__thread_pcs[__Vi0] = VL_RAND_RESET_I(8);
+    }
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_count = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__head = VL_RAND_RESET_I(4);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__empty = VL_RAND_RESET_I(1);
     vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__unnamedblk1__DOT__i = 0;
     vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__unnamedblk2__DOT__any_lsu_waiting = VL_RAND_RESET_I(1);
     vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__unnamedblk2__DOT__unnamedblk3__DOT__i = 0;
-    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__unnamedblk4__DOT__i = 0;
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT____Vlvbound_hfb768481__0 = VL_RAND_RESET_I(2);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT____Vlvbound_h9de7772c__0 = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT____Vlvbound_h920e3ca9__0 = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT____Vlvbound_h39e7ab3d__0 = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT____Vlvbound_hbb256656__0 = VL_RAND_RESET_I(2);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT____Vlvbound_hfc72edf2__0 = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT____Vlvbound_h39e7ab3d__1 = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT____Vlvbound_h920e3ca9__1 = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT____Vlvbound_hbb256656__1 = VL_RAND_RESET_I(2);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT____Vlvbound_hfc72edf2__1 = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT____Vlvbound_h39e7ab3d__2 = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT____Vlvbound_h920e3ca9__2 = VL_RAND_RESET_I(8);
     vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__clk = VL_RAND_RESET_I(1);
     vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__reset = VL_RAND_RESET_I(1);
     vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__start = VL_RAND_RESET_I(1);
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__thread_count = VL_RAND_RESET_I(3);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__warp = VL_RAND_RESET_I(4);
+    for (int __Vi0 = 0; __Vi0 < 1; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__warps_states[__Vi0] = VL_RAND_RESET_I(8);
     }
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
+    for (int __Vi0 = 0; __Vi0 < 1; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__warp_status[__Vi0] = VL_RAND_RESET_I(2);
     }
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
-        vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__masks[__Vi0] = VL_RAND_RESET_I(2);
+    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
+        vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__next_pcs[__Vi0] = VL_RAND_RESET_I(8);
     }
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__core_state = VL_RAND_RESET_I(3);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__divergence_event = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__rejoin_event = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__decoded_immediate = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__rejoin_event_pc = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__empty = VL_RAND_RESET_I(1);
+    for (int __Vi0 = 0; __Vi0 < 1; ++__Vi0) {
+        vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__masks[__Vi0] = VL_RAND_RESET_I(4);
+    }
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__head = VL_RAND_RESET_I(4);
     for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__warp_ids[__Vi0] = VL_RAND_RESET_I(4);
     }
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
-        for (int __Vi1 = 0; __Vi1 < 2; ++__Vi1) {
+    for (int __Vi0 = 0; __Vi0 < 1; ++__Vi0) {
+        for (int __Vi1 = 0; __Vi1 < 4; ++__Vi1) {
             vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__warp_groups[__Vi0][__Vi1] = VL_RAND_RESET_I(3);
         }
     }
-    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__thread_count = VL_RAND_RESET_I(3);
     vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__done = VL_RAND_RESET_I(1);
     vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__total_warps = VL_RAND_RESET_I(8);
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
+    for (int __Vi0 = 0; __Vi0 < 1; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__done_warps[__Vi0] = VL_RAND_RESET_I(1);
     }
     vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__warps_dispatched = VL_RAND_RESET_I(8);
     vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__warps_done = VL_RAND_RESET_I(8);
     vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__start_execution = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__warp_next_mask = VL_RAND_RESET_I(4);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__head_next = VL_RAND_RESET_I(4);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__current_mask = VL_RAND_RESET_I(4);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__rejoining_threads_mask = VL_RAND_RESET_I(4);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__rejoin_event_head = VL_RAND_RESET_I(4);
     vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__unnamedblk1__DOT__i = 0;
     vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__unnamedblk2__DOT__i = 0;
     vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__unnamedblk3__DOT__i = 0;
@@ -1004,6 +1197,33 @@ VL_ATTR_COLD void Vtop___024root___ctor_var_reset(Vtop___024root* vlSelf) {
     vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__unnamedblk5__DOT__i = 0;
     vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__unnamedblk5__DOT__unnamedblk6__DOT__j = 0;
     vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__unnamedblk7__DOT__i = 0;
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__unnamedblk8__DOT__i = 0;
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT____Vlvbound_h698f6414__0 = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT____Vlvbound_he266a5c5__0 = VL_RAND_RESET_I(4);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__divergence_stack_gen__BRA__0__KET____DOT__divergence_stack_inst__DOT__clk = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__divergence_stack_gen__BRA__0__KET____DOT__divergence_stack_inst__DOT__reset = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__divergence_stack_gen__BRA__0__KET____DOT__divergence_stack_inst__DOT__enable = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__divergence_stack_gen__BRA__0__KET____DOT__divergence_stack_inst__DOT__warp_next_mask = VL_RAND_RESET_I(4);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__divergence_stack_gen__BRA__0__KET____DOT__divergence_stack_inst__DOT__head_next = VL_RAND_RESET_I(4);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__divergence_stack_gen__BRA__0__KET____DOT__divergence_stack_inst__DOT__next_pc = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__divergence_stack_gen__BRA__0__KET____DOT__divergence_stack_inst__DOT__divergence_event = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__divergence_stack_gen__BRA__0__KET____DOT__divergence_stack_inst__DOT__rejoin_event = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__divergence_stack_gen__BRA__0__KET____DOT__divergence_stack_inst__DOT__core_state = VL_RAND_RESET_I(3);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__divergence_stack_gen__BRA__0__KET____DOT__divergence_stack_inst__DOT__rejoining_threads_mask = VL_RAND_RESET_I(4);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__divergence_stack_gen__BRA__0__KET____DOT__divergence_stack_inst__DOT__rejoining_head = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__divergence_stack_gen__BRA__0__KET____DOT__divergence_stack_inst__DOT__rejoining_pc = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__divergence_stack_gen__BRA__0__KET____DOT__divergence_stack_inst__DOT__empty = VL_RAND_RESET_I(1);
+    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
+        vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__divergence_stack_gen__BRA__0__KET____DOT__divergence_stack_inst__DOT__divergence_stack[__Vi0] = VL_RAND_RESET_I(4);
+    }
+    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
+        vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__divergence_stack_gen__BRA__0__KET____DOT__divergence_stack_inst__DOT__pc_stack[__Vi0] = VL_RAND_RESET_I(8);
+    }
+    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
+        vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__divergence_stack_gen__BRA__0__KET____DOT__divergence_stack_inst__DOT__head_stack[__Vi0] = VL_RAND_RESET_I(4);
+    }
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__divergence_stack_gen__BRA__0__KET____DOT__divergence_stack_inst__DOT__stack_pointer = VL_RAND_RESET_I(4);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__scheduler_instance__DOT__warp_manager_instance__DOT__divergence_stack_gen__BRA__0__KET____DOT__divergence_stack_inst__DOT__unnamedblk1__DOT__i = 0;
     vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warptothreadbus_instance__DOT__clk = VL_RAND_RESET_I(1);
     vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warptothreadbus_instance__DOT__reset = VL_RAND_RESET_I(1);
     vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warptothreadbus_instance__DOT__warp = VL_RAND_RESET_I(4);
@@ -1013,19 +1233,19 @@ VL_ATTR_COLD void Vtop___024root___ctor_var_reset(Vtop___024root* vlSelf) {
     for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warptothreadbus_instance__DOT__rt_regs[__Vi0] = VL_RAND_RESET_I(8);
     }
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
+    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warptothreadbus_instance__DOT__lsu_out_computes[__Vi0] = VL_RAND_RESET_I(8);
     }
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
+    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warptothreadbus_instance__DOT__alu_out_computes[__Vi0] = VL_RAND_RESET_I(8);
     }
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
+    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warptothreadbus_instance__DOT__Running_Threads[__Vi0] = VL_RAND_RESET_I(3);
     }
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
+    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warptothreadbus_instance__DOT__rs_computes[__Vi0] = VL_RAND_RESET_I(8);
     }
-    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
+    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
         vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warptothreadbus_instance__DOT__rt_computes[__Vi0] = VL_RAND_RESET_I(8);
     }
     for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
@@ -1073,6 +1293,9 @@ VL_ATTR_COLD void Vtop___024root___ctor_var_reset(Vtop___024root* vlSelf) {
     vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__0__KET____DOT__pc_instance__DOT__decoded_immediate = VL_RAND_RESET_I(8);
     vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__0__KET____DOT__pc_instance__DOT__decoded_nzp_write_enable = VL_RAND_RESET_I(1);
     vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__0__KET____DOT__pc_instance__DOT__decoded_pc_mux = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__0__KET____DOT__pc_instance__DOT__warp = VL_RAND_RESET_I(2);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__0__KET____DOT__pc_instance__DOT__rejoin_event = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__0__KET____DOT__pc_instance__DOT__rejoin_event_pc = VL_RAND_RESET_I(8);
     vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__0__KET____DOT__pc_instance__DOT__alu_out = VL_RAND_RESET_I(8);
     vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__0__KET____DOT__pc_instance__DOT__current_pc = VL_RAND_RESET_I(8);
     vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__0__KET____DOT__pc_instance__DOT__next_pc = VL_RAND_RESET_I(8);
@@ -1113,10 +1336,99 @@ VL_ATTR_COLD void Vtop___024root___ctor_var_reset(Vtop___024root* vlSelf) {
     vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__1__KET____DOT__pc_instance__DOT__decoded_immediate = VL_RAND_RESET_I(8);
     vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__1__KET____DOT__pc_instance__DOT__decoded_nzp_write_enable = VL_RAND_RESET_I(1);
     vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__1__KET____DOT__pc_instance__DOT__decoded_pc_mux = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__1__KET____DOT__pc_instance__DOT__warp = VL_RAND_RESET_I(2);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__1__KET____DOT__pc_instance__DOT__rejoin_event = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__1__KET____DOT__pc_instance__DOT__rejoin_event_pc = VL_RAND_RESET_I(8);
     vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__1__KET____DOT__pc_instance__DOT__alu_out = VL_RAND_RESET_I(8);
     vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__1__KET____DOT__pc_instance__DOT__current_pc = VL_RAND_RESET_I(8);
     vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__1__KET____DOT__pc_instance__DOT__next_pc = VL_RAND_RESET_I(8);
     vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__1__KET____DOT__pc_instance__DOT__nzp = VL_RAND_RESET_I(3);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__alu_instance__DOT__clk = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__alu_instance__DOT__reset = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__alu_instance__DOT__enable = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__alu_instance__DOT__core_state = VL_RAND_RESET_I(3);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__alu_instance__DOT__decoded_alu_arithmetic_mux = VL_RAND_RESET_I(2);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__alu_instance__DOT__decoded_alu_output_mux = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__alu_instance__DOT__rs = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__alu_instance__DOT__rt = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__alu_instance__DOT__alu_out = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__alu_instance__DOT__alu_out_reg = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__lsu_instance__DOT__clk = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__lsu_instance__DOT__reset = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__lsu_instance__DOT__enable = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__lsu_instance__DOT__core_state = VL_RAND_RESET_I(3);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__lsu_instance__DOT__decoded_mem_read_enable = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__lsu_instance__DOT__decoded_mem_write_enable = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__lsu_instance__DOT__rs = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__lsu_instance__DOT__rt = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__lsu_instance__DOT__mem_read_valid = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__lsu_instance__DOT__mem_read_address = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__lsu_instance__DOT__mem_read_ready = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__lsu_instance__DOT__mem_read_data = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__lsu_instance__DOT__mem_write_valid = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__lsu_instance__DOT__mem_write_address = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__lsu_instance__DOT__mem_write_data = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__lsu_instance__DOT__mem_write_ready = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__lsu_instance__DOT__lsu_state = VL_RAND_RESET_I(2);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__lsu_instance__DOT__lsu_out = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__pc_instance__DOT__clk = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__pc_instance__DOT__reset = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__pc_instance__DOT__enable = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__pc_instance__DOT__core_state = VL_RAND_RESET_I(3);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__pc_instance__DOT__decoded_nzp = VL_RAND_RESET_I(3);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__pc_instance__DOT__decoded_immediate = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__pc_instance__DOT__decoded_nzp_write_enable = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__pc_instance__DOT__decoded_pc_mux = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__pc_instance__DOT__warp = VL_RAND_RESET_I(2);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__pc_instance__DOT__rejoin_event = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__pc_instance__DOT__rejoin_event_pc = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__pc_instance__DOT__alu_out = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__pc_instance__DOT__current_pc = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__pc_instance__DOT__next_pc = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__2__KET____DOT__pc_instance__DOT__nzp = VL_RAND_RESET_I(3);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__alu_instance__DOT__clk = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__alu_instance__DOT__reset = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__alu_instance__DOT__enable = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__alu_instance__DOT__core_state = VL_RAND_RESET_I(3);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__alu_instance__DOT__decoded_alu_arithmetic_mux = VL_RAND_RESET_I(2);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__alu_instance__DOT__decoded_alu_output_mux = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__alu_instance__DOT__rs = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__alu_instance__DOT__rt = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__alu_instance__DOT__alu_out = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__alu_instance__DOT__alu_out_reg = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__lsu_instance__DOT__clk = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__lsu_instance__DOT__reset = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__lsu_instance__DOT__enable = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__lsu_instance__DOT__core_state = VL_RAND_RESET_I(3);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__lsu_instance__DOT__decoded_mem_read_enable = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__lsu_instance__DOT__decoded_mem_write_enable = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__lsu_instance__DOT__rs = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__lsu_instance__DOT__rt = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__lsu_instance__DOT__mem_read_valid = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__lsu_instance__DOT__mem_read_address = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__lsu_instance__DOT__mem_read_ready = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__lsu_instance__DOT__mem_read_data = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__lsu_instance__DOT__mem_write_valid = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__lsu_instance__DOT__mem_write_address = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__lsu_instance__DOT__mem_write_data = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__lsu_instance__DOT__mem_write_ready = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__lsu_instance__DOT__lsu_state = VL_RAND_RESET_I(2);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__lsu_instance__DOT__lsu_out = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__pc_instance__DOT__clk = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__pc_instance__DOT__reset = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__pc_instance__DOT__enable = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__pc_instance__DOT__core_state = VL_RAND_RESET_I(3);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__pc_instance__DOT__decoded_nzp = VL_RAND_RESET_I(3);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__pc_instance__DOT__decoded_immediate = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__pc_instance__DOT__decoded_nzp_write_enable = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__pc_instance__DOT__decoded_pc_mux = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__pc_instance__DOT__warp = VL_RAND_RESET_I(2);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__pc_instance__DOT__rejoin_event = VL_RAND_RESET_I(1);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__pc_instance__DOT__rejoin_event_pc = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__pc_instance__DOT__alu_out = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__pc_instance__DOT__current_pc = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__pc_instance__DOT__next_pc = VL_RAND_RESET_I(8);
+    vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__warps__BRA__3__KET____DOT__pc_instance__DOT__nzp = VL_RAND_RESET_I(3);
     vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__threads__BRA__0__KET____DOT__register_instance__DOT__clk = VL_RAND_RESET_I(1);
     vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__threads__BRA__0__KET____DOT__register_instance__DOT__reset = VL_RAND_RESET_I(1);
     vlSelf->gpu__DOT__cores__BRA__1__KET____DOT__core_instance__DOT__threads__BRA__0__KET____DOT__register_instance__DOT__enable = VL_RAND_RESET_I(1);
