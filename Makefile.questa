@@ -1,0 +1,57 @@
+# Questa UVM Makefile for LFGPU
+# Usage:
+#   make -f Makefile.questa questa_compile
+#   make -f Makefile.questa questa_sim [TESTNAME=base_test]
+#   make -f Makefile.questa questa_regress
+#   make -f Makefile.questa questa_clean
+
+TESTNAME   ?= base_test
+WORK_LIB   := work
+VSIM_FLAGS := -c -sv_seed random +UVM_VERBOSITY=UVM_MEDIUM
+
+# Questa executables (override if not on PATH)
+VLIB  := vlib
+VLOG  := vlog
+VSIM  := vsim
+
+.PHONY: questa_compile questa_sim questa_regress questa_coverage questa_clean
+
+# ── Compile ──────────────────────────────────────────────────────────────
+questa_compile:
+	@echo "=== Compiling LFGPU UVM testbench ==="
+	$(VLIB) $(WORK_LIB) 2>/dev/null || true
+	$(VLOG) -work $(WORK_LIB) -f tb/questa_flist.f
+
+# ── Simulate ─────────────────────────────────────────────────────────────
+questa_sim: questa_compile
+	@echo "=== Running test: $(TESTNAME) ==="
+	$(VSIM) $(VSIM_FLAGS) \
+	    +UVM_TESTNAME=$(TESTNAME) \
+	    -coverage \
+	    -do "coverage save -onexit coverage.ucdb; run -all; quit -f" \
+	    $(WORK_LIB).tb_top
+
+# ── Regression ───────────────────────────────────────────────────────────
+questa_regress: questa_compile
+	@echo "=== Running regression ==="
+	@for test in base_test; do \
+	    echo "--- $$test ---"; \
+	    $(VSIM) $(VSIM_FLAGS) \
+	        +UVM_TESTNAME=$$test \
+	        -coverage \
+	        -do "coverage save -onexit coverage_$${test}.ucdb; run -all; quit -f" \
+	        $(WORK_LIB).tb_top || exit 1; \
+	done
+	@echo "=== Regression PASSED ==="
+
+# ── Coverage report ───────────────────────────────────────────────────────
+questa_coverage:
+	@echo "=== Generating coverage report ==="
+	vcover merge -out merged.ucdb coverage*.ucdb 2>/dev/null || \
+	    vcover merge -out merged.ucdb coverage.ucdb
+	vcover report -html -output coverage_html merged.ucdb
+	@echo "Coverage report: coverage_html/index.html"
+
+# ── Clean ─────────────────────────────────────────────────────────────────
+questa_clean:
+	rm -rf $(WORK_LIB) transcript *.ucdb *.wlf coverage_html vsim.wlf
