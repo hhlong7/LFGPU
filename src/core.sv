@@ -77,20 +77,25 @@ module core #(
     reg [4:0]  decoded_rt_address;
     reg [31:0] decoded_immediate;
     reg [2:0]  decoded_funct3;
+    reg [11:0] decoded_csr_addr;
 
     // ── Decoded control signals ───────────────────────────────────────
     reg        decoded_reg_write_enable;
     reg        decoded_mem_read_enable;
     reg        decoded_mem_write_enable;
     reg [1:0]  decoded_reg_input_mux;
-    reg [3:0]  decoded_alu_op;
+    reg [4:0]  decoded_alu_op;
     reg        decoded_alu_src_imm;
     reg        decoded_src_pc;
     reg [1:0]  decoded_pc_src;
     reg        decoded_ret;
+    reg        decoded_csr_read_enable;
     reg        divergence_event;
     reg        rejoin_event;
     reg [31:0] rejoin_event_pc;
+
+    // ── CSR outputs (one per thread in block) ─────────────────────────
+    wire [31:0] csr_out_regs [0:THREADS_PER_BLOCK-1];
 
     // ── Fetcher ───────────────────────────────────────────────────────
     fetcher #(
@@ -129,6 +134,8 @@ module core #(
         .decoded_src_pc         (decoded_src_pc),
         .decoded_pc_src         (decoded_pc_src),
         .decoded_ret            (decoded_ret),
+        .decoded_csr_read_enable(decoded_csr_read_enable),
+        .decoded_csr_addr       (decoded_csr_addr),
         .divergence_event       (divergence_event),
         .rejoin_event           (rejoin_event)
     );
@@ -245,9 +252,19 @@ module core #(
             );
         end
 
-        // ── Per-block register files ──────────────────────────────────
+        // ── Per-block CSR banks + register files ─────────────────────
         genvar u;
         for (u = 0; u < THREADS_PER_BLOCK; u = u + 1) begin : threads
+            csr #(
+                .THREAD_ID        (u),
+                .THREADS_PER_BLOCK(THREADS_PER_BLOCK)
+            ) csr_instance (
+                .block_id (block_id),
+                .block_dim(thread_count),
+                .csr_addr (decoded_csr_addr),
+                .csr_out  (csr_out_regs[u])
+            );
+
             registers #(
                 .THREADS_PER_BLOCK(THREADS_PER_BLOCK),
                 .THREAD_ID        (u),
@@ -266,6 +283,7 @@ module core #(
                 .decoded_immediate      (decoded_immediate),
                 .alu_out                (alu_out_regs[u]),
                 .lsu_out                (lsu_out_regs[u]),
+                .csr_out                (csr_out_regs[u]),
                 .current_pc             (current_pc),
                 .rs                     (rs_regs[u]),
                 .rt                     (rt_regs[u])

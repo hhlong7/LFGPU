@@ -1,26 +1,35 @@
+; Vector addition with branch-based control flow, 8 threads
+; Same algorithm as matadd_8_threads but uses branch to skip inactive threads.
+; A[0..7] at byte 0..28, B at 32..60, C at 64..92
 .threads 8
-.data 41 42 43 44 45 46 47 48        ; matrix A (1 x 8)
-.data 51 52 53 54 55 56 57 58         ; matrix B (1 x 8)
-                               ;@(reset):
-                               ;registers[13] <= block_id;          // %blockIdx
-                               ;registers[14] <= THREADS_PER_BLOCK; // %blockDim
-                               ;registers[15] <= THREAD_ID;         // %threadIdx
-MUL R0, %blockIdx, %blockDim
-ADD R0, R0, %threadIdx         ; i = blockIdx * blockDim + threadIdx
+.data 41 42 43 44 45 46 47 48
+.data 51 52 53 54 55 56 57 58
 
-CONST R1, #0                   ; baseA (matrix A base address)
-CONST R2, #8                   ; baseB (matrix B base address)
-CONST R3, #16                  ; baseC (matrix C base address)
+csrr  a0, 0xCC1
+csrr  a1, 0xCC2
+mul   a0, a0, a1
+csrr  a1, 0xCC0
+add   a0, a0, a1          ; a0 = i
 
-ADD R4, R1, R0                 ; addr(A[i]) = baseA + i
-LDR R4, R4                     ; load A[i] from global memory
+; guard: skip if i >= 8
+li    t6, 8
+bge   a0, t6, DONE
 
-ADD R5, R2, R0                 ; addr(B[i]) = baseB + i
-LDR R5, R5                     ; load B[i] from global memory
+slli  t0, a0, 2
 
-ADD R6, R4, R5                 ; C[i] = A[i] + B[i]
+li    t1, 0
+add   t1, t1, t0
+lw    t1, 0(t1)           ; A[i]
 
-ADD R7, R3, R0                 ; addr(C[i]) = baseC + i
-STR R7, R6                     ; store C[i] in global memory
+li    t2, 32
+add   t2, t2, t0
+lw    t2, 0(t2)           ; B[i]
 
-RET                            ; end of kernel
+add   t3, t1, t2
+
+li    t4, 64
+add   t4, t4, t0
+sw    t3, 0(t4)
+
+DONE:
+ebreak

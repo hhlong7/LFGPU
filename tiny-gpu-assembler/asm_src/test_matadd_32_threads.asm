@@ -1,35 +1,31 @@
+; Vector addition: C[i] = A[i] + B[i], 32 threads
+; A[0..31] at byte addresses 0..124 (baseA=0), B at 128..252, C at 256..380
 .threads 32
-; matrix A (1 x 32)
-.data 1  2  3  4  5  6  7  8  9  10
-.data 11 12 13 14 15 16 17 18 19 20
-.data 21 22 23 24 25 26 27 28 29 30
-.data 31 32 
-; matrix B (1 x 32)
-.data 33 34 35 36 37 38 39 40 41 42
-.data 43 44 45 46 47 48 49 50 51 52
-.data 53 54 55 56 57 58 59 60 61 62
-.data 63 64
-                               ;@(reset):
-                               ;registers[13] <= block_id;          // %blockIdx
-                               ;registers[14] <= THREADS_PER_BLOCK; // %blockDim
-                               ;registers[15] <= THREAD_ID;         // %threadIdx
-NOP ; dumb fix for hardware issue
-MUL R0, %blockIdx, %blockDim
-ADD R0, R0, %threadIdx         ; i = blockIdx * blockDim + threadIdx
+.data 1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16
+.data 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32
+.data 32 31 30 29 28 27 26 25 24 23 22 21 20 19 18 17
+.data 16 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1
 
-CONST R1, #0                   ; baseA (matrix A base address)
-CONST R2, #32                  ; baseB (matrix B base address)
-CONST R3, #64                  ; baseC (matrix C base address)
+csrr  a0, 0xCC1
+csrr  a1, 0xCC2
+mul   a0, a0, a1
+csrr  a1, 0xCC0
+add   a0, a0, a1          ; a0 = i
 
-ADD R4, R1, R0                 ; addr(A[i]) = baseA + i
-LDR R4, R4                     ; load A[i] from global memory
+slli  t0, a0, 2           ; byte offset = i * 4
 
-ADD R5, R2, R0                 ; addr(B[i]) = baseB + i
-LDR R5, R5                     ; load B[i] from global memory
+li    t1, 0
+add   t1, t1, t0
+lw    t1, 0(t1)           ; A[i]
 
-ADD R6, R4, R5                 ; C[i] = A[i] + B[i]
+li    t2, 128
+add   t2, t2, t0
+lw    t2, 0(t2)           ; B[i]
 
-ADD R7, R3, R0                 ; addr(C[i]) = baseC + i
-STR R7, R6                     ; store C[i] in global memory
+add   t3, t1, t2
 
-RET                            ; end of kernel
+li    t4, 256
+add   t4, t4, t0
+sw    t3, 0(t4)           ; C[i] = A[i] + B[i]
+
+ebreak

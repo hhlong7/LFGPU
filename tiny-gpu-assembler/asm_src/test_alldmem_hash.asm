@@ -1,40 +1,25 @@
-;;;;;;;;;;;;;
-;
-;
-; super simple hashing function, just to stress the alu more than the other tests
-;
-; scored 4708 cycles
+; Hash-pattern memory test: each thread writes a simple hash of (thread_id XOR addr)
+; to a set of memory locations.
 .threads 8
 
-CONST R8, #255 ; max color
-CONST R1, #1 ; spread
-MUL R0, %blockIdx, %blockDim    ; Compute global thread index
-ADD R0, R0, %threadIdx          ; R0 = thread ID
+csrr  a0, 0xCC1
+csrr  a1, 0xCC2
+mul   a0, a0, a1
+csrr  a1, 0xCC0
+add   a0, a0, a1          ; a0 = global thread id
 
-MUL R0, R0, R1 ; apply spread
-CONST R5, #8 ; when this is equal to (number hardware threads * spread), it writes in clean lines
-CONST R4, #1 ; inc tracker
+li    t0, 4
+mul   t0, a0, t0          ; base address = thread_id * 4
 
-CONST R7, #8  ; times to loop
-CONST R6, #4  ; times to loop 2
-CONST R2, #0  ; tracker
+li    t1, 0               ; loop counter
+li    t2, 8               ; iterations
+
 LOOP:
-  CONST R10, #0 ; tracker 2
-LOOP2:
-    CONST R1, #0;
-    ADD R3, R0, R1     ; Copy address to hash
-    MUL R3, R3, R3    ; Square it (nonlinear growth)
-    CONST R1, #8; salt random data
-    ADD R3, R3, R1    ; Add stride for mixing
-    MUL R3, R3, R3    ; Square again
-    ADD R3, R3, R0    ; Mix with original
-    STR R0, R3        ; Store hashed value to address
-    ;STR R0, R0 ; store current address
-    ADD R0, R0, R5 ; inc addr
-    ADD R10, R10, R4 ; inc tracker 2
-    CMP R10, R6
-    BRn LOOP2 ; loop if
-  ADD R2, R2, R4 ; inc tracker
-  CMP R2, R7
-  BRn LOOP ; loop if R2 is negative compared to R7
-RET
+  xor   t3, a0, t1        ; hash = thread_id XOR k
+  slli  t4, t1, 2
+  add   t4, t0, t4        ; addr = base + k * 4
+  sw    t3, 0(t4)
+  addi  t1, t1, 1
+  blt   t1, t2, LOOP
+
+ebreak

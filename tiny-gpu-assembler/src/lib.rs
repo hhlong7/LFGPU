@@ -1,273 +1,318 @@
-use std::any::Any;
-use std::error::Error;
-use std::fmt;
-use std::str::FromStr;
-
+// RV32IM Assembler Library
+// Provides instruction encoding helpers and operand parsers.
+// operation.rs is kept as an empty shim for Cargo compatibility.
 pub mod operation;
-use crate::operation::Operation;
 
-#[derive(Debug)]
-pub struct MachineLine {
-    pub line_type: LineType,
-    pub parsed_line: ParsedLine,
-    pub bin: Option<String>,
-    pub comment: Option<String>,
-    pub line_num: u32,
+use std::collections::HashMap;
+
+// ── Instruction format encoders ─────────────────────────────────────────────
+
+/// R-type: funct7[31:25] | rs2[24:20] | rs1[19:15] | funct3[14:12] | rd[11:7] | opcode[6:0]
+pub fn r_type(funct7: u32, rs2: u32, rs1: u32, funct3: u32, rd: u32, opcode: u32) -> u32 {
+    (funct7 << 25) | (rs2 << 20) | (rs1 << 15) | (funct3 << 12) | (rd << 7) | opcode
 }
 
-#[derive(Debug, Clone)]
-pub struct ParsedLine {
-    pub tokens: Vec<String>,
-    pub comment: Option<String>,
-    pub line_num: u32,
+/// I-type: imm[11:0][31:20] | rs1[19:15] | funct3[14:12] | rd[11:7] | opcode[6:0]
+pub fn i_type(imm: i32, rs1: u32, funct3: u32, rd: u32, opcode: u32) -> u32 {
+    let imm12 = (imm as u32) & 0xFFF;
+    (imm12 << 20) | (rs1 << 15) | (funct3 << 12) | (rd << 7) | opcode
 }
 
-pub fn identify_line(line: ParsedLine) -> Box<dyn LexedLine> {
-    match line.tokens.first() {
-        Some(first_token) => {
-            let is_memory_dir = |a: &String| a.chars().next().is_some_and(|char_1| char_1 == '.'); //checks if the first token is a memory directive
-            let is_label = |a: &String| a.chars().last().is_some_and(|char_1| char_1 == ':'); //checks if the first token is a label
+/// S-type: imm[11:5][31:25] | rs2[24:20] | rs1[19:15] | funct3[14:12] | imm[4:0][11:7] | opcode[6:0]
+pub fn s_type(imm: i32, rs2: u32, rs1: u32, funct3: u32, opcode: u32) -> u32 {
+    let imm12 = (imm as u32) & 0xFFF;
+    let hi = (imm12 >> 5) & 0x7F;
+    let lo = imm12 & 0x1F;
+    (hi << 25) | (rs2 << 20) | (rs1 << 15) | (funct3 << 12) | (lo << 7) | opcode
+}
 
-            if is_memory_dir(first_token) {
-                Box::new(MemoryLine { parsed: line })
-            } else if is_label(first_token) {
-                Box::new(LabelLine { parsed: line })
-            } else if Operation::from_str(&first_token).is_ok() {
-                Box::new(OperationLine {
-                    parsed: line,
-                    instruct_num: None,
-                })
+/// B-type: PC-relative branch offset (byte offset, bit[0] always 0)
+pub fn b_type(offset: i32, rs2: u32, rs1: u32, funct3: u32, opcode: u32) -> u32 {
+    let off = offset as u32;
+    let bit12    = (off >> 12) & 1;
+    let bits10_5 = (off >>  5) & 0x3F;
+    let bits4_1  = (off >>  1) & 0xF;
+    let bit11    = (off >> 11) & 1;
+    (bit12 << 31) | (bits10_5 << 25) | (rs2 << 20) | (rs1 << 15)
+        | (funct3 << 12) | (bits4_1 << 8) | (bit11 << 7) | opcode
+}
+
+/// U-type: imm20 placed at instruction bits[31:12]; rd gets imm20 << 12
+pub fn u_type(imm20: u32, rd: u32, opcode: u32) -> u32 {
+    ((imm20 & 0xFFFFF) << 12) | (rd << 7) | opcode
+}
+
+/// J-type: PC-relative JAL offset (byte offset, bit[0] always 0)
+pub fn j_type(offset: i32, rd: u32, opcode: u32) -> u32 {
+    let off = offset as u32;
+    let bit20     = (off >> 20) & 1;
+    let bits10_1  = (off >>  1) & 0x3FF;
+    let bit11     = (off >> 11) & 1;
+    let bits19_12 = (off >> 12) & 0xFF;
+    (bit20 << 31) | (bits10_1 << 21) | (bit11 << 20) | (bits19_12 << 12) | (rd << 7) | opcode
+}
+
+// ── Register and immediate parsers ─────────────────────────────────────────
+
+/// Parse register name (xN or ABI alias) → register number 0..31
+pub fn parse_reg(s: &str) -> Result<u32, String> {
+    let s = s.trim().trim_end_matches(',');
+    if let Some(n_str) = s.strip_prefix('x') {
+        if let Ok(n) = n_str.parse::<u32>() {
+            if n < 32 { return Ok(n); }
+        }
+    }
+    Ok(match s {
+        "zero" => 0,  "ra"  => 1,  "sp"  => 2,  "gp"  => 3,  "tp"  => 4,
+        "t0"   => 5,  "t1"  => 6,  "t2"  => 7,
+        "s0" | "fp" => 8, "s1" => 9,
+        "a0"   => 10, "a1"  => 11, "a2"  => 12, "a3"  => 13, "a4"  => 14,
+        "a5"   => 15, "a6"  => 16, "a7"  => 17,
+        "s2"   => 18, "s3"  => 19, "s4"  => 20, "s5"  => 21, "s6"  => 22,
+        "s7"   => 23, "s8"  => 24, "s9"  => 25, "s10" => 26, "s11" => 27,
+        "t3"   => 28, "t4"  => 29, "t5"  => 30, "t6"  => 31,
+        _ => return Err(format!("Unknown register '{}'", s)),
+    })
+}
+
+/// Parse integer literal: decimal or 0x/0X hex, with optional leading '-'
+pub fn parse_imm(s: &str) -> Result<i32, String> {
+    let s = s.trim().trim_end_matches(',');
+    let (neg, s) = s.strip_prefix('-').map(|r| (true, r)).unwrap_or((false, s));
+    let val = if let Some(h) = s.strip_prefix("0x").or_else(|| s.strip_prefix("0X")) {
+        i64::from_str_radix(h, 16).map_err(|e| e.to_string())? as i32
+    } else {
+        s.parse::<i32>().map_err(|e| e.to_string())?
+    };
+    Ok(if neg { -val } else { val })
+}
+
+/// Parse CSR address: numeric (0xCC0 etc.) or named
+pub fn parse_csr(s: &str) -> Result<u32, String> {
+    let s = s.trim().trim_end_matches(',');
+    match s.to_ascii_lowercase().as_str() {
+        "threadidx" | "csr_threadidx" => return Ok(0xCC0),
+        "blockidx"  | "csr_blockidx"  => return Ok(0xCC1),
+        "blockdim"  | "csr_blockdim"  => return Ok(0xCC2),
+        _ => {}
+    }
+    parse_imm(s).map(|v| v as u32)
+}
+
+/// Parse `offset(base)` format for load/store operands → (offset, base_reg_num)
+pub fn parse_mem_arg(s: &str) -> Result<(i32, u32), String> {
+    let s = s.trim().trim_end_matches(',');
+    if let Some(paren) = s.find('(') {
+        let offset_str = &s[..paren];
+        let rest = s[paren + 1..].trim_end_matches(')');
+        let offset = if offset_str.trim().is_empty() { 0 } else { parse_imm(offset_str)? };
+        let base = parse_reg(rest)?;
+        Ok((offset, base))
+    } else {
+        Err(format!("Expected offset(base) format, got '{}'", s))
+    }
+}
+
+/// Resolve label-or-immediate; if relative=true returns (label_pc − current_pc)
+pub fn resolve(s: &str, pc: u32, labels: &HashMap<String, u32>, relative: bool) -> Result<i32, String> {
+    let s = s.trim().trim_end_matches(',');
+    if let Ok(n) = parse_imm(s) {
+        return Ok(n);
+    }
+    match labels.get(s) {
+        Some(&lpc) => Ok(if relative { lpc as i32 - pc as i32 } else { lpc as i32 }),
+        None => Err(format!("Undefined label '{}'", s)),
+    }
+}
+
+// ── Instruction size for pass-1 PC tracking ─────────────────────────────────
+
+/// Returns the number of bytes the mnemonic will emit (needed for label resolution)
+pub fn instruction_byte_size(mnemonic: &str, args: &[String]) -> u32 {
+    if mnemonic == "li" {
+        if let Some(s) = args.get(1) {
+            if let Ok(n) = parse_imm(s) {
+                return if (-2048..2048).contains(&n) { 4 } else { 8 };
+            }
+        }
+    }
+    4
+}
+
+// ── Main instruction encoder ─────────────────────────────────────────────────
+
+/// Encode one mnemonic + args at byte address `pc`.
+/// Returns one or two 32-bit words (li with large immediate emits lui+addi).
+pub fn encode(
+    mnemonic: &str,
+    args: &[String],
+    pc: u32,
+    labels: &HashMap<String, u32>,
+) -> Result<Vec<u32>, String> {
+    let m = mnemonic.to_ascii_lowercase();
+    let m = m.as_str();
+
+    // Argument accessor closures
+    let reg = |i: usize| -> Result<u32, String> {
+        args.get(i)
+            .ok_or_else(|| format!("{}: missing arg {}", mnemonic, i))
+            .and_then(|s| parse_reg(s))
+    };
+    let imm = |i: usize| -> Result<i32, String> {
+        args.get(i)
+            .ok_or_else(|| format!("{}: missing arg {}", mnemonic, i))
+            .and_then(|s| parse_imm(s))
+    };
+    let rel = |i: usize| -> Result<i32, String> {
+        args.get(i)
+            .ok_or_else(|| format!("{}: missing arg {}", mnemonic, i))
+            .and_then(|s| resolve(s, pc, labels, true))
+    };
+    let mem = |i: usize| -> Result<(i32, u32), String> {
+        args.get(i)
+            .ok_or_else(|| format!("{}: missing arg {}", mnemonic, i))
+            .and_then(|s| parse_mem_arg(s))
+    };
+    let csr = |i: usize| -> Result<u32, String> {
+        args.get(i)
+            .ok_or_else(|| format!("{}: missing arg {}", mnemonic, i))
+            .and_then(|s| parse_csr(s))
+    };
+
+    let enc: u32 = match m {
+        // ── RV32I R-type ───────────────────────────────────────────────────
+        "add"  => r_type(0x00, reg(2)?, reg(1)?, 0x0, reg(0)?, 0x33),
+        "sub"  => r_type(0x20, reg(2)?, reg(1)?, 0x0, reg(0)?, 0x33),
+        "sll"  => r_type(0x00, reg(2)?, reg(1)?, 0x1, reg(0)?, 0x33),
+        "slt"  => r_type(0x00, reg(2)?, reg(1)?, 0x2, reg(0)?, 0x33),
+        "sltu" => r_type(0x00, reg(2)?, reg(1)?, 0x3, reg(0)?, 0x33),
+        "xor"  => r_type(0x00, reg(2)?, reg(1)?, 0x4, reg(0)?, 0x33),
+        "srl"  => r_type(0x00, reg(2)?, reg(1)?, 0x5, reg(0)?, 0x33),
+        "sra"  => r_type(0x20, reg(2)?, reg(1)?, 0x5, reg(0)?, 0x33),
+        "or"   => r_type(0x00, reg(2)?, reg(1)?, 0x6, reg(0)?, 0x33),
+        "and"  => r_type(0x00, reg(2)?, reg(1)?, 0x7, reg(0)?, 0x33),
+
+        // ── RV32M R-type ───────────────────────────────────────────────────
+        "mul"    => r_type(0x01, reg(2)?, reg(1)?, 0x0, reg(0)?, 0x33),
+        "mulh"   => r_type(0x01, reg(2)?, reg(1)?, 0x1, reg(0)?, 0x33),
+        "mulhsu" => r_type(0x01, reg(2)?, reg(1)?, 0x2, reg(0)?, 0x33),
+        "mulhu"  => r_type(0x01, reg(2)?, reg(1)?, 0x3, reg(0)?, 0x33),
+        "div"    => r_type(0x01, reg(2)?, reg(1)?, 0x4, reg(0)?, 0x33),
+        "divu"   => r_type(0x01, reg(2)?, reg(1)?, 0x5, reg(0)?, 0x33),
+        "rem"    => r_type(0x01, reg(2)?, reg(1)?, 0x6, reg(0)?, 0x33),
+        "remu"   => r_type(0x01, reg(2)?, reg(1)?, 0x7, reg(0)?, 0x33),
+
+        // ── I-type ALU ─────────────────────────────────────────────────────
+        "addi"  => i_type(imm(2)?, reg(1)?, 0x0, reg(0)?, 0x13),
+        "slti"  => i_type(imm(2)?, reg(1)?, 0x2, reg(0)?, 0x13),
+        "sltiu" => i_type(imm(2)?, reg(1)?, 0x3, reg(0)?, 0x13),
+        "xori"  => i_type(imm(2)?, reg(1)?, 0x4, reg(0)?, 0x13),
+        "ori"   => i_type(imm(2)?, reg(1)?, 0x6, reg(0)?, 0x13),
+        "andi"  => i_type(imm(2)?, reg(1)?, 0x7, reg(0)?, 0x13),
+        "slli"  => {
+            let sh = imm(2)? as u32 & 0x1F;
+            (sh << 20) | (reg(1)? << 15) | (0x1 << 12) | (reg(0)? << 7) | 0x13
+        }
+        "srli" => {
+            let sh = imm(2)? as u32 & 0x1F;
+            (sh << 20) | (reg(1)? << 15) | (0x5 << 12) | (reg(0)? << 7) | 0x13
+        }
+        "srai" => {
+            let sh = imm(2)? as u32 & 0x1F;
+            (0x20 << 25) | (sh << 20) | (reg(1)? << 15) | (0x5 << 12) | (reg(0)? << 7) | 0x13
+        }
+
+        // ── Loads: rd, offset(rs1) ─────────────────────────────────────────
+        "lb"  => { let (o, b) = mem(1)?; i_type(o, b, 0x0, reg(0)?, 0x03) }
+        "lh"  => { let (o, b) = mem(1)?; i_type(o, b, 0x1, reg(0)?, 0x03) }
+        "lw"  => { let (o, b) = mem(1)?; i_type(o, b, 0x2, reg(0)?, 0x03) }
+        "lbu" => { let (o, b) = mem(1)?; i_type(o, b, 0x4, reg(0)?, 0x03) }
+        "lhu" => { let (o, b) = mem(1)?; i_type(o, b, 0x5, reg(0)?, 0x03) }
+
+        // ── Stores: rs2, offset(rs1) ───────────────────────────────────────
+        "sb" => { let (o, b) = mem(1)?; s_type(o, reg(0)?, b, 0x0, 0x23) }
+        "sh" => { let (o, b) = mem(1)?; s_type(o, reg(0)?, b, 0x1, 0x23) }
+        "sw" => { let (o, b) = mem(1)?; s_type(o, reg(0)?, b, 0x2, 0x23) }
+
+        // ── Branches: rs1, rs2, label ──────────────────────────────────────
+        "beq"  => b_type(rel(2)?, reg(1)?, reg(0)?, 0x0, 0x63),
+        "bne"  => b_type(rel(2)?, reg(1)?, reg(0)?, 0x1, 0x63),
+        "blt"  => b_type(rel(2)?, reg(1)?, reg(0)?, 0x4, 0x63),
+        "bge"  => b_type(rel(2)?, reg(1)?, reg(0)?, 0x5, 0x63),
+        "bltu" => b_type(rel(2)?, reg(1)?, reg(0)?, 0x6, 0x63),
+        "bgeu" => b_type(rel(2)?, reg(1)?, reg(0)?, 0x7, 0x63),
+        // Pseudo branches (single-register, compare to zero)
+        "beqz" => b_type(rel(1)?, 0, reg(0)?, 0x0, 0x63),  // beq rs, x0, lbl
+        "bnez" => b_type(rel(1)?, 0, reg(0)?, 0x1, 0x63),  // bne rs, x0, lbl
+        "bltz" => b_type(rel(1)?, 0, reg(0)?, 0x4, 0x63),  // blt rs, x0, lbl
+        "bgez" => b_type(rel(1)?, 0, reg(0)?, 0x5, 0x63),  // bge rs, x0, lbl
+        "bgtz" => b_type(rel(1)?, reg(0)?, 0, 0x4, 0x63),  // blt x0, rs, lbl
+        "blez" => b_type(rel(1)?, reg(0)?, 0, 0x5, 0x63),  // bge x0, rs, lbl
+
+        // ── JAL ────────────────────────────────────────────────────────────
+        "jal" => {
+            if args.len() == 1 {
+                j_type(rel(0)?, 1, 0x6F)   // jal ra, label
             } else {
-                Box::new(BadLine { parsed: line })
+                j_type(rel(1)?, reg(0)?, 0x6F)
             }
         }
-        None => Box::new(HumanLine { parsed: line }),
-    }
-}
 
-/// Types of Lexed and Parsed Lines
-/// ---
-///
-
-// Define a trait that the struct will implement
-pub trait LexedLine: std::fmt::Debug + std::any::Any {
-    // fn parsed(&self) -> &ParsedLine {
-    //     self.parsed
-    // };
-    fn as_any(&self) -> &dyn std::any::Any;
-    fn as_any_mut(&mut self) -> &mut dyn std::any::Any;
-    fn parsed(&self) -> &ParsedLine;
-}
-
-// this is so verbose it's actually crazy. Just know that this exists so that I can downcast the generic "LexedLine" type
-impl LexedLine for OperationLine {
-    fn as_any(&self) -> &dyn Any {
-        self
-    }
-    fn as_any_mut(&mut self) -> &mut dyn std::any::Any {
-        self
-    }
-    fn parsed(&self) -> &ParsedLine {
-        &self.parsed
-    }
-}
-
-impl LexedLine for LabelLine {
-    fn as_any(&self) -> &dyn Any {
-        self
-    }
-    fn as_any_mut(&mut self) -> &mut dyn std::any::Any {
-        self
-    }
-    fn parsed(&self) -> &ParsedLine {
-        &self.parsed
-    }
-}
-
-impl LexedLine for MemoryLine {
-    fn as_any(&self) -> &dyn Any {
-        self
-    }
-    fn as_any_mut(&mut self) -> &mut dyn std::any::Any {
-        self
-    }
-    fn parsed(&self) -> &ParsedLine {
-        &self.parsed
-    }
-}
-
-impl LexedLine for HumanLine {
-    fn as_any(&self) -> &dyn Any {
-        self
-    }
-    fn as_any_mut(&mut self) -> &mut dyn std::any::Any {
-        self
-    }
-    fn parsed(&self) -> &ParsedLine {
-        &self.parsed
-    }
-}
-
-impl LexedLine for BadLine {
-    fn as_any(&self) -> &dyn Any {
-        self
-    }
-    fn as_any_mut(&mut self) -> &mut dyn std::any::Any {
-        self
-    }
-    fn parsed(&self) -> &ParsedLine {
-        &self.parsed
-    }
-}
-#[derive(Debug, PartialEq)]
-pub enum LineType {
-    Operation,
-    Bad,
-    Human,
-    Memory,
-    Label,
-}
-
-#[derive(Debug)]
-pub struct BadLine {
-    pub parsed: ParsedLine,
-}
-#[derive(Debug)]
-pub struct OperationLine {
-    pub parsed: ParsedLine,
-    pub instruct_num: Option<u16>,
-}
-
-#[derive(Debug)]
-pub struct HumanLine {
-    // human lines are either comment only, or whitespace only
-    pub parsed: ParsedLine,
-}
-#[derive(Debug)]
-pub struct MemoryLine {
-    pub parsed: ParsedLine,
-}
-
-#[derive(Debug)]
-pub struct LabelLine {
-    pub parsed: ParsedLine,
-}
-
-/// Custom Error Type
-/// ---
-
-#[derive(Debug)]
-pub enum LexError {
-    InvalidOperation(String),
-    InvalidArgument(String), // Error with additional info
-}
-
-impl fmt::Display for LexError {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        match *self {
-            LexError::InvalidOperation(ref msg) => {
-                write!(f, "Invalid input provided: {msg} is not an operator")
+        // ── JALR: rd, rs1, imm  OR  rd, imm(rs1) ──────────────────────────
+        "jalr" => {
+            if args.len() == 1 {
+                i_type(0, reg(0)?, 0x0, 0, 0x67)         // jalr rs (jump, no link)
+            } else if args.len() >= 2 && args[1].contains('(') {
+                let (o, b) = mem(1)?;
+                i_type(o, b, 0x0, reg(0)?, 0x67)
+            } else {
+                i_type(imm(2).unwrap_or(0), reg(1)?, 0x0, reg(0)?, 0x67)
             }
-            LexError::InvalidArgument(ref msg) => write!(f, "Is not an: {}", msg),
         }
-    }
-}
 
-impl Error for LexError {
-    // You can also add additional methods if needed, such as for logging
-}
+        // ── Upper immediates ───────────────────────────────────────────────
+        "lui"   => u_type(imm(1)? as u32, reg(0)?, 0x37),
+        "auipc" => u_type(imm(1)? as u32, reg(0)?, 0x17),
 
-/// Register Definitions
-/// ---
+        // ── System ─────────────────────────────────────────────────────────
+        "ebreak" => 0x00100073,
+        "ecall"  => 0x00000073,
+        "fence"  => 0x0FF0000F,
+        "csrrw"  => i_type(csr(1)? as i32, reg(2)?, 0x1, reg(0)?, 0x73),
+        "csrrs"  => i_type(csr(1)? as i32, reg(2)?, 0x2, reg(0)?, 0x73),
+        "csrrc"  => i_type(csr(1)? as i32, reg(2)?, 0x3, reg(0)?, 0x73),
+        "csrr"   => i_type(csr(1)? as i32, 0,       0x2, reg(0)?, 0x73), // csrrs rd, csr, x0
+        "csrw"   => i_type(csr(0)? as i32, reg(1)?, 0x1, 0,       0x73), // csrrw x0, csr, rs
 
-pub enum Register {
-    // General-purpose read/write registers
-    R0,
-    R1,
-    R2,
-    R3,
-    R4,
-    R5,
-    R6,
-    R7,
-    R8,
-    R9,
-    R10,
-    R11,
-    R12,
+        // ── Pseudos ────────────────────────────────────────────────────────
+        "nop"  => 0x00000013,                                        // addi x0, x0, 0
+        "mv"   => i_type(0, reg(1)?, 0x0, reg(0)?, 0x13),           // addi rd, rs, 0
+        "not"  => i_type(-1, reg(1)?, 0x4, reg(0)?, 0x13),          // xori rd, rs, -1
+        "neg"  => r_type(0x20, reg(1)?, 0, 0x0, reg(0)?, 0x33),     // sub rd, x0, rs
+        "seqz" => i_type(1, reg(1)?, 0x3, reg(0)?, 0x13),           // sltiu rd, rs, 1
+        "snez" => r_type(0x00, reg(1)?, 0, 0x3, reg(0)?, 0x33),     // sltu rd, x0, rs
+        "ret"  => i_type(0, 1, 0x0, 0, 0x67),                       // jalr x0, ra, 0
+        "j"    => j_type(rel(0)?, 0, 0x6F),                         // jal x0, label
+        "call" => j_type(rel(0)?, 1, 0x6F),                         // jal ra, label
 
-    // Special-purpose read-only registers
-    BlockIdx,  // %blockIdx
-    BlockDim,  // %blockDim
-    ThreadIdx, // %threadIdx
-}
-
-impl Register {
-    // A method to return the name of the register as a string for easier printing
-    pub fn name(&self) -> &'static str {
-        match self {
-            Register::R0 => "R0",
-            Register::R1 => "R1",
-            Register::R2 => "R2",
-            Register::R3 => "R3",
-            Register::R4 => "R4",
-            Register::R5 => "R5",
-            Register::R6 => "R6",
-            Register::R7 => "R7",
-            Register::R8 => "R8",
-            Register::R9 => "R9",
-            Register::R10 => "R10",
-            Register::R11 => "R11",
-            Register::R12 => "R12",
-            Register::BlockIdx => "%blockIdx",
-            Register::BlockDim => "%blockDim",
-            Register::ThreadIdx => "%threadIdx",
+        // li is multi-word; handled below
+        "li" => {
+            let rd = reg(0)?;
+            let n = imm(1)?;
+            return if (-2048..2048).contains(&n) {
+                Ok(vec![i_type(n, 0, 0x0, rd, 0x13)])   // addi rd, x0, n
+            } else {
+                let hi = ((n + 0x800) >> 12) as u32;
+                let lo = n - (hi as i32) * 4096;
+                Ok(vec![
+                    u_type(hi, rd, 0x37),           // lui rd, hi
+                    i_type(lo, rd, 0x0, rd, 0x13),  // addi rd, rd, lo
+                ])
+            };
         }
-    }
 
-    pub fn bits(&self) -> &'static str {
-        match self {
-            Register::R0 => "0000",
-            Register::R1 => "0001",
-            Register::R2 => "0010",
-            Register::R3 => "0011",
-            Register::R4 => "0100",
-            Register::R5 => "0101",
-            Register::R6 => "0110",
-            Register::R7 => "0111",
-            Register::R8 => "1000",
-            Register::R9 => "1001",
-            Register::R10 => "1010",
-            Register::R11 => "1011",
-            Register::R12 => "1100",
-            Register::BlockIdx => "1101",
-            Register::BlockDim => "1110",
-            Register::ThreadIdx => "1111",
-        }
-    }
+        _ => return Err(format!("Unknown mnemonic '{}'", mnemonic)),
+    };
 
-    pub fn from_str(s: &str) -> Result<Self, LexError> {
-        let no_commas = s.replace(",", ""); //remove commas (allows for comma or no commas) should probably sophisticate later
-        match no_commas.as_str() {
-            "R0" => Ok(Register::R0),
-            "R1" => Ok(Register::R1),
-            "R2" => Ok(Register::R2),
-            "R3" => Ok(Register::R3),
-            "R4" => Ok(Register::R4),
-            "R5" => Ok(Register::R5),
-            "R6" => Ok(Register::R6),
-            "R7" => Ok(Register::R7),
-            "R8" => Ok(Register::R8),
-            "R9" => Ok(Register::R9),
-            "R10" => Ok(Register::R10),
-            "R11" => Ok(Register::R11),
-            "R12" => Ok(Register::R12),
-            "%blockIdx" => Ok(Register::BlockIdx),
-            "%blockDim" => Ok(Register::BlockDim),
-            "%threadIdx" => Ok(Register::ThreadIdx),
-            _ => Err(LexError::InvalidArgument(
-                "Invalid register string".to_string(),
-            )),
-        }
-    }
+    Ok(vec![enc])
 }
