@@ -1,0 +1,27 @@
+{
+  "testname": "test_negatives",
+  "memory_delay": 1,
+  "threads": 4,
+  "hardware": {
+    "program_addr_bits": 32,
+    "program_data_bits": 32,
+    "program_channels": 1,
+    "data_addr_bits": 32,
+    "data_data_bits": 32,
+    "data_channels": 4
+  },
+  "program_memory": [
+    "0x00500293",
+    "0x00300313",
+    "0x40600333",
+    "0x00000393",
+    "0x0063a023",
+    "0x00100073"
+  ],
+  "initial_data": [
+    0,
+    0,
+    0,
+    0
+  ]
+}

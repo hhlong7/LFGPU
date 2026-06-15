@@ -1,0 +1,50 @@
+{
+  "testname": "test_matadd_8_threads",
+  "memory_delay": 1,
+  "threads": 8,
+  "hardware": {
+    "program_addr_bits": 32,
+    "program_data_bits": 32,
+    "program_channels": 1,
+    "data_addr_bits": 32,
+    "data_data_bits": 32,
+    "data_channels": 4
+  },
+  "program_memory": [
+    "0xcc102573",
+    "0xcc2025f3",
+    "0x02b50533",
+    "0xcc0025f3",
+    "0x00b50533",
+    "0x00251293",
+    "0x00000313",
+    "0x00530333",
+    "0x00032303",
+    "0x02000393",
+    "0x005383b3",
+    "0x0003a383",
+    "0x00730e33",
+    "0x04000e93",
+    "0x005e8eb3",
+    "0x01cea023",
+    "0x00100073"
+  ],
+  "initial_data": [
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    51,
+    52,
+    53,
+    54,
+    55,
+    56,
+    57,
+    58
+  ]
+}
