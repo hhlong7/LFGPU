@@ -2,8 +2,8 @@
 `timescale 1ns/1ns
 
 // REGISTER FILE  (RV32I: 32 × 32-bit, x0 hardwired to zero)
-// Special GPU metadata (threadIdx, blockIdx, blockDim) moved to CSRs (Phase 3).
-// reg_input_mux:  00=ALU  01=memory  10=PC+4 (JAL/JALR link)  11=reserved (CSR Phase 3)
+// Special GPU metadata (threadIdx, blockIdx, blockDim) provided via CSR bank.
+// reg_input_mux:  00=ALU  01=memory  10=PC+4 (JAL/JALR link)  11=CSR read
 module registers #(
     parameter THREADS_PER_BLOCK = 4,
     parameter THREAD_ID         = 0,
@@ -35,12 +35,16 @@ module registers #(
     // current_pc needed for JAL/JALR link register (rd = PC+4)
     input reg [31:0] current_pc,
 
+    // CSR read result (from csr.sv instance in core.sv)
+    input reg [31:0] csr_out,
+
     output reg [31:0] rs,
     output reg [31:0] rt
 );
     localparam ARITHMETIC = 2'b00,
                MEMORY     = 2'b01,
-               PC_PLUS4   = 2'b10;
+               PC_PLUS4   = 2'b10,
+               CSR_READ   = 2'b11;
 
     reg [31:0] registers [31:0];
 
@@ -64,7 +68,7 @@ module registers #(
                         ARITHMETIC: registers[decoded_rd_address] <= alu_out;
                         MEMORY:     registers[decoded_rd_address] <= lsu_out;
                         PC_PLUS4:   registers[decoded_rd_address] <= current_pc + 32'd4;
-                        default:    ; // 2'b11 reserved for CSR (Phase 3)
+                        CSR_READ:   registers[decoded_rd_address] <= csr_out;
                     endcase
                 end
             end

@@ -56,6 +56,8 @@ module warp_manager #(
     reg [THREADS_PER_WARP-1:0] head_next;
     reg [THREADS_PER_WARP-1:0] rejoining_threads_mask;
     reg [THREADS_PER_WARP-1:0] rejoin_event_head;
+    reg branch_any_taken;
+    reg branch_any_fallthrough;
 
     // Branch target for divergence stack = current_pc + imm_b
     wire [31:0] branch_target = current_pc + decoded_immediate;
@@ -122,17 +124,32 @@ module warp_manager #(
             // ── Branch divergence (UPDATE state) ────────────────────────
             // A thread took the branch if its next_pc != current_pc + 4.
             if (divergence_event && core_state == 3'b110) begin
+                branch_any_taken = 1'b0;
+                branch_any_fallthrough = 1'b0;
+                for (int j = 0; j < THREADS_PER_WARP; j++) begin
+                    if (masks[warp_groups[warp][j]] == 1) begin
+                        if (next_pcs[j] != (current_pc + 32'd4))
+                            branch_any_taken = 1'b1;
+                        else
+                            branch_any_fallthrough = 1'b1;
+                    end
+                end
+
                 warp_next_mask <= {THREADS_PER_WARP{1'b0}};
                 for (int j = 0; j < THREADS_PER_WARP; j++) begin
-                    if (next_pcs[j] != (current_pc + 32'd4)) begin
-                        // Thread took the branch
-                        head_next         <= j;
-                        warp_next_mask[j] <= 1;
-                        masks[warp_groups[warp][j]] <= 0;
-                    end else begin
-                        // Thread fell through
-                        if (masks[warp_groups[warp][j]] == 1)
+                    if (masks[warp_groups[warp][j]] == 1) begin
+                        if (branch_any_taken && branch_any_fallthrough) begin
+                            if (next_pcs[j] != (current_pc + 32'd4)) begin
+                                // On true divergence, run fall-through lanes first and stack taken lanes.
+                                head_next         <= j;
+                                warp_next_mask[j] <= 1;
+                                masks[warp_groups[warp][j]] <= 0;
+                            end else begin
+                                head <= j;
+                            end
+                        end else begin
                             head <= j;
+                        end
                     end
                 end
             end

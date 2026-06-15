@@ -1,32 +1,29 @@
-.threads 4                      ; Specify 4 threads
-.data 1 2 3 4; Initial data in memory (4 bytes)
+; Load/double/store test: each thread loads data[threadId], doubles it,
+; stores to data[threadId + numThreads].  Repeats for 4 iterations.
+; Initial data at byte 0..12 (4 words), output at byte 16..28.
+.threads 4
+.data 1 2 3 4
 
-MUL R6, %blockIdx, %blockDim    ; Compute global thread index
-ADD R6, R6, %threadIdx          ; R0 = thread ID
+csrr  a0, 0xCC1
+csrr  a1, 0xCC2
+mul   a0, a0, a1
+csrr  a1, 0xCC0
+add   a0, a0, a1          ; a0 = i
 
-CONST R2, #4                    ; Number of iterations
-CONST R7, #0                    ; Iteration counter = 0
+slli  t0, a0, 2           ; base load addr = i * 4
+
+li    t1, 0               ; iteration counter
+li    t2, 4               ; max iterations
 
 LOOP:
-    ; Load byte from memory
-    LDR R8, R6                  ; R8 = memory[R6] (load)
+  lw    t3, 0(t0)         ; load current value
+  add   t3, t3, t3        ; double it
 
-    ; Add byte to itself (R8 * 2)
-    ADD R8, R8, R8              ; R8 = R8 * 2
+  addi  t4, t0, 16        ; store addr = load addr + 16 bytes (4 words ahead)
+  sw    t3, 0(t4)
 
-    ; Store the result 4 addresses later
-    CONST R1, #4                ; Increment for addresses (4 bytes later)
-    ADD R6, R6, R1              ; R6 = R6 + 4 (next store address)
-    STR R6, R8                  ; memory[R6] = R8 (store)
-    NOP
-    NOP
+  addi  t0, t0, 16        ; advance load addr by 4 words
+  addi  t1, t1, 1         ; i++
+  blt   t1, t2, LOOP
 
-    ; Increment iteration counter
-    CONST R12, #1 
-    ADD R7, R7, R12              ; R7 = R7 + 1
-
-    ; Repeat if iteration counter < 4
-    CMP R7, R2
-    BRn LOOP                    ; Branch back to LOOP if R7 < 4
-
-RET                             ; End of program
+ebreak

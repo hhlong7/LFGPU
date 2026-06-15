@@ -17,6 +17,7 @@ tb/interfaces/data_mem_if.sv
 
 // ── RTL source files ─────────────────────────────────────────────────────
 src/dcr.sv
+src/csr.sv
 src/registers.sv
 src/alu.sv
 src/lsu.sv

@@ -1,49 +1,24 @@
-;;;;;;;;;;;;;
-;
-;
-; Super slow because it relies on dispatcher 8x
-; (not good, but high thread count)
-; scored 2994 cycles
-;
-.threads 64
-;CONST R5, #1 ; #threads
-CONST R8, #255 ; max color
-CONST R1, #4 ; #spread
-MUL R0, %blockIdx, %blockDim    ; Compute global thread index
-ADD R0, R0, %threadIdx          ; R0 = thread ID
+; Memory stress test (64-word coverage): 8 threads write to 64 locations.
+; Each thread writes its thread id to 8 consecutive word addresses.
+.threads 8
 
-MUL R0, R0, R1 ; apply spread
+csrr  a0, 0xCC1
+csrr  a1, 0xCC2
+mul   a0, a0, a1
+csrr  a1, 0xCC0
+add   a0, a0, a1          ; a0 = global thread id
 
-CONST R2, #0  ; tracker
-LOOP: 
-  CONST R10, #0 ; tracker 2
-LOOP2:
-    CONST R1, #1 ;
-    STR R0, R0 ; store current
-    ADD R0, R0, R1 ; inc addr
-    STR R0, R0 ; store current; 4x unrolled
-    ADD R0, R0, R1 ; inc addr ; 4x unrolled
-    STR R0, R0 ; store current
-    ADD R0, R0, R1 ; inc addr
-    STR R0, R0 ; store current; 4x unrolled
-    ADD R0, R0, R1 ; inc addr ; 4x unrolled
-    
-    CONST R1, #1 ;
-    ADD R10, R10, R1 ; inc tracker 2
+; base address = thread_id * 8 words = thread_id * 32 bytes
+li    t0, 32
+mul   t0, a0, t0          ; t0 = base byte address
 
-    CONST R1, #1  ; #times to loop
-    CMP R10, R1
-    BRn LOOP2 ; loop if
-  
-  CONST R1, #1 ;
-  ADD R2, R2, R1 ; inc tracker
+li    t1, 0               ; loop counter
+li    t2, 8               ; 8 iterations per thread
 
-  CONST R1, #64 ; 4*8
-  ADD R0, R0, R1 ;
+LOOP:
+  sw    a0, 0(t0)         ; write thread_id to current address
+  addi  t0, t0, 4         ; advance by one word
+  addi  t1, t1, 1
+  blt   t1, t2, LOOP
 
-  CONST R1, #1  ; #times to loop
-  CMP R2, R1
-  BRn LOOP ; loop if R2 is negative compared to R7
-RET
-
-
+ebreak

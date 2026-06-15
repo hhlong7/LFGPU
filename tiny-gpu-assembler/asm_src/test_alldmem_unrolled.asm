@@ -1,62 +1,20 @@
-;;;;;;;;;;;;;
-;
-;
-; scored 2662 cycles
-;
+; Unrolled memory write test: each thread writes 4 consecutive words
+; using explicit (unrolled) stores instead of a loop.
 .threads 8
-;CONST R5, #1 ; #threads
 
-CONST R2, #0  ; tracker
-CONST R1, #8 ; #spread
-MUL R0, %blockIdx, %blockDim    ; Compute global thread index
-ADD R0, R0, %threadIdx          ; R0 = thread ID
-MUL R0, R0, R1 ; apply spread
+csrr  a0, 0xCC1
+csrr  a1, 0xCC2
+mul   a0, a0, a1
+csrr  a1, 0xCC0
+add   a0, a0, a1          ; a0 = global thread id
 
+; base address = thread_id * 16 bytes (4 words per thread)
+li    t0, 16
+mul   t0, a0, t0
 
-LOOP: 
-  CONST R1, #1 ;
-  ADD R2, R2, R1 ; inc tracker
+sw    a0, 0(t0)           ; word 0
+sw    a0, 4(t0)           ; word 1
+sw    a0, 8(t0)           ; word 2
+sw    a0, 12(t0)          ; word 3
 
-;  STR R0, R0 ; store current
-;  ADD R0, R0, R1 ; inc addr
-;  STR R0, R0 ; store current; 8x unrolled
-;  ADD R0, R0, R1 ; inc addr ; 8x unrolled
-;  STR R0, R0 ; store current
-;  ADD R0, R0, R1 ; inc addr
-;  STR R0, R0 ; store current; 8x unrolled
-;  ADD R0, R0, R1 ; inc addr ; 8x unrolled
-;  STR R0, R0 ; store current
-;  ADD R0, R0, R1 ; inc addr
-;  STR R0, R0 ; store current; 8x unrolled
-;  ADD R0, R0, R1 ; inc addr ; 8x unrolled
-;  STR R0, R0 ; store current
-;  ADD R0, R0, R1 ; inc addr
-;  STR R0, R0 ; store current; 8x unrolled
-;  ADD R0, R0, R1 ; inc addr ; 8x unrolled
-  STR R0, R0 ; store current
-  ADD R0, R0, R1 ; inc addr
-  STR R0, R0 ; store current; 8x unrolled
-  ADD R0, R0, R1 ; inc addr ; 8x unrolled
-  STR R0, R0 ; store current
-  ADD R0, R0, R1 ; inc addr
-  STR R0, R0 ; store current; 8x unrolled
-  ADD R0, R0, R1 ; inc addr ; 8x unrolled
-  STR R0, R0 ; store current
-  ADD R0, R0, R1 ; inc addr
-  STR R0, R0 ; store current; 8x unrolled
-  ADD R0, R0, R1 ; inc addr ; 8x unrolled
-  STR R0, R0 ; store current
-  ADD R0, R0, R1 ; inc addr
-  STR R0, R0 ; store current; 8x unrolled
-  ADD R0, R0, R1 ; inc addr ; 8x unrolled
-
-  ;CONST R1, #48 ; 16*(4-1)
-  CONST R1, #56 ; 8*(8-1)
-  ADD R0, R0, R1 ;
-
-  CONST R1, #4  ; #times to loop
-  CMP R2, R1
-  BRn LOOP ; loop if R2 is negative compared to R7
-RET
-
-
+ebreak

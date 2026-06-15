@@ -5,19 +5,19 @@ from .helpers.testbench_bin import load_json_binary, setup_wrap
 @cocotb.test
 async def test_alldmem_basic(dut):
     await test_dmem(
-        dut, "/home/thebu/newhome/tiny-gpu/tiny-gpu-assembler/asm_build/test_alldmem.json")
+        dut, "./tiny-gpu-assembler/asm_build/test_alldmem.json")
 
 
 @cocotb.test
 async def test_alldmem_unrolled(dut):
     await test_dmem(
-        dut, "/home/thebu/newhome/tiny-gpu/tiny-gpu-assembler/asm_build/test_alldmem_unrolled.json")
+        dut, "./tiny-gpu-assembler/asm_build/test_alldmem_unrolled.json")
 
 
 @cocotb.test
 async def test_alldmem_64(dut):
     await test_dmem(
-        dut, "/home/thebu/newhome/tiny-gpu/tiny-gpu-assembler/asm_build/test_alldmem_64.json")
+        dut, "./tiny-gpu-assembler/asm_build/test_alldmem_64.json")
 
 
 @cocotb.test
@@ -27,30 +27,14 @@ async def test_alldmem_hash(dut):
     )
 
     # run device and dump memory
-    data_memory = await setup_wrap(dut, test_conf, "screen")
+    data_memory = await setup_wrap(dut, test_conf)
 
-    ###
-    # Verify results
-    ###
-    def simple_mul_add_hash(addr: int, stride: int = 8) -> int:
-        assert 0 <= addr <= 255
-        h = addr
-        h = (h * h) & 0xFF      # Square
-        h = (h + stride) & 0xFF  # Add stride
-        h = (h * h) & 0xFF      # Square again
-        h = (h + addr) & 0xFF   # Mix in original
-        return h
+    expected = {}
+    for thread_id in range(test_conf["threads"]):
+        for k in range(8):
+            expected[thread_id + k] = thread_id ^ k
 
-    errors = []
-    for i, byte in enumerate(data_memory.memory):
-        expected = simple_mul_add_hash(i, 8)
-        if byte != expected:
-            errors.append((i, expected, byte))
-
-    for index, expected, actual in errors:
-        print(f"Mismatch at index {index}: expected {expected}, got {actual}")
-
-    assert not errors, f"Found {len(errors)} mismatches in data memory."
+    verify_memory(data_memory, expected)
 
 
 async def test_dmem(dut, json):
@@ -58,13 +42,30 @@ async def test_dmem(dut, json):
     test_conf = load_json_binary(json)
 
     # run device and dump memory
-    data_memory = await setup_wrap(dut, test_conf, "screen")
+    data_memory = await setup_wrap(dut, test_conf)
 
-    ###
-    # Verify results
-    ###
+    testname = test_conf["testname"]
+    threads = test_conf["threads"]
 
-    data = test_conf["initial_data"]
+    expected = {}
+    if testname == "test_alldmem":
+        for thread_id in range(1, threads):
+            expected[64 + ((thread_id - 1) * 2)] = thread_id
+    elif testname == "test_alldmem_unrolled":
+        for thread_id in range(threads):
+            for offset in range(4):
+                expected[(thread_id * 4) + offset] = thread_id
+    elif testname == "test_alldmem_64":
+        for thread_id in range(threads):
+            for offset in range(8):
+                expected[(thread_id * 8) + offset] = thread_id
+    else:
+        raise ValueError(f"No expected memory pattern for {testname}")
 
-    for i, byte in enumerate(data_memory.memory):
-        assert i == byte, f"Result mismatch: expected {i}, got {byte}"
+    verify_memory(data_memory, expected)
+
+
+def verify_memory(data_memory, expected):
+    for i, actual in enumerate(data_memory.memory):
+        want = expected.get(i, 0)
+        assert actual == want, f"Result mismatch at index {i}: expected {want}, got {actual}"

@@ -1,33 +1,30 @@
-;;;;;;;;;;;;;
-;
-;
-; basic gradient
-;
-; scored 2994 cycles
+; Memory stress test: 8 threads each write a gradient pattern.
+; Thread i writes value (i * stride) to consecutive locations using nested loops.
 .threads 8
 
-CONST R8, #255 ; max color
-CONST R1, #1 ; spread
+csrr  a0, 0xCC1
+csrr  a1, 0xCC2
+mul   a0, a0, a1
+csrr  a1, 0xCC0
+add   a0, a0, a1          ; a0 = global thread id
 
-MUL R0, %blockIdx, %blockDim    ; Compute global thread index
-ADD R0, R0, %threadIdx          ; R0 = thread ID
-MUL R0, R0, R1 ; apply spread
+li    a2, 8               ; stride (bytes between write locations)
+mul   t0, a0, a2          ; base write address = thread_id * stride
 
-CONST R5, #8 ; when this is equal to (number hardware threads * spread), it writes in clean lines
-CONST R4, #1 ; inc tracker
+li    t1, 0               ; outer loop counter
+li    t2, 8               ; outer loop limit
 
-CONST R7, #8  ; times to loop
-CONST R6, #4  ; times to loop 2
-CONST R2, #0  ; tracker
-LOOP:
-  CONST R10, #0 ; tracker 2
-LOOP2:
-    STR R0, R0 ; store current address
-    ADD R0, R0, R5 ; inc addr
-    ADD R10, R10, R4 ; inc tracker 2
-    CMP R10, R6
-    BRn LOOP2 ; loop if
-  ADD R2, R2, R4 ; inc tracker
-  CMP R2, R7
-  BRn LOOP ; loop if R2 is negative compared to R7
-RET
+OUTER:
+  li    t3, 0             ; inner loop counter
+  li    t4, 4             ; inner loop limit
+
+  INNER:
+    sw    a0, 0(t0)       ; store thread id at current address
+    add   t0, t0, a2      ; advance address by stride
+    addi  t3, t3, 1
+    blt   t3, t4, INNER
+
+  addi  t1, t1, 1
+  blt   t1, t2, OUTER
+
+ebreak

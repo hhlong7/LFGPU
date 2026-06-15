@@ -9,6 +9,7 @@ import copy
 
 from ctypes import c_uint8
 import json
+import os
 
 default_hw_config = {
     "program_addr_bits": 8,
@@ -70,6 +71,7 @@ enable_logging = False
 
 async def setup_wrap(dut, test_config):
     num_memory_printout = 256
+    max_cycles = int(os.getenv("SIM_MAX_CYCLES", "20000"))
 
     hw = test_config["hardware"]
     mem_delay = test_config["memory_delay"]
@@ -130,6 +132,12 @@ async def setup_wrap(dut, test_config):
     cocotb.start_soon(program_memory.run())
 
     while dut.done.value != 1 or extra_cycles > 0:
+        if cycles >= max_cycles:
+            raise AssertionError(
+                f"Timed out after {max_cycles} cycles waiting for dut.done "
+                f"in {test_config['testname']}. Set SIM_MAX_CYCLES to override."
+            )
+
         if dut.done.value == 1:
             extra_cycles -= 1
 

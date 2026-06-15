@@ -50,6 +50,7 @@ module warp_scheduler #(
     reg [$clog2(WARPS_PER_CORE):0] next_warp;
 
     reg [THREADS_PER_WARP-1:0] head;
+    reg any_waiting;
 
     wire [7:0] total_warps;
 
@@ -127,7 +128,7 @@ module warp_scheduler #(
                 REQUEST: core_state <= WAIT;
 
                 WAIT: begin
-                    reg any_waiting = 1'b0;
+                    any_waiting = 1'b0;
                     for (int i = 0; i < THREADS_PER_WARP; i++) begin
                         if (lsu_state[i] == 2'b01 || lsu_state[i] == 2'b10)
                             any_waiting = 1'b1;
@@ -140,10 +141,6 @@ module warp_scheduler #(
                 UPDATE: begin
                     if (decoded_ret) begin
                         warps_states[warp] <= DONE;
-                    end else if (empty[warp] || divergence_event) begin
-                        warp_status[warp]  <= READY;
-                        warp_pcs[warp]     <= current_pc + 32'd4;
-                        warps_states[warp] <= FETCH;
                     end else begin
                         warp_status[warp]  <= READY;
                         warp_pcs[warp]     <= next_pc[head];

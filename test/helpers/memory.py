@@ -7,23 +7,28 @@ from .logger import logger
 
 def _read_signal_bits(signal, total_bits: int, field_bits: int, channels: int) -> list[int]:
     """
-    Read a cocotb signal (packed or unpacked array) and return a list of
-    per-channel integer values, MSB-first (channel 0 = leftmost/highest bits).
+    Read a cocotb signal (packed or unpacked array) and return per-channel
+    integer values. sv2v packs channel i into bits i*field_bits +: field_bits.
     """
     try:
-        # Try unpacked array access: signal[i] gives individual elements
-        _ = signal[0]
-        result = []
-        for i in range(channels):
-            raw = str(signal[channels - 1 - i].value)  # HDL arrays: [0] = LSB end
-            clean = re.sub(r'[^01]', '0', raw)
-            result.append(int(clean, 2) if clean else 0)
-        return result
-    except (TypeError, IndexError, AttributeError):
-        # Packed integer signal: one wide bus
         raw = re.sub(r'[^01]', '0', str(signal.value))
-        raw = raw.zfill(total_bits)
-        return [int(raw[i * field_bits:(i + 1) * field_bits], 2) for i in range(channels)]
+        signal_bits = max(len(raw), total_bits)
+        actual_field_bits = signal_bits // channels if signal_bits % channels == 0 else field_bits
+        raw = raw.zfill(signal_bits)
+        if len(raw) >= signal_bits:
+            return [
+                int(raw[signal_bits - ((i + 1) * actual_field_bits):signal_bits - (i * actual_field_bits)], 2)
+                for i in range(channels)
+            ]
+    except (TypeError, ValueError, AttributeError):
+        pass
+
+    result = []
+    for i in range(channels):
+        raw = str(signal[i].value)
+        clean = re.sub(r'[^01]', '0', raw)
+        result.append(int(clean, 2) if clean else 0)
+    return result
 
 
 def _write_signal(signal, values: list[int], field_bits: int, channels: int):
@@ -31,14 +36,17 @@ def _write_signal(signal, values: list[int], field_bits: int, channels: int):
     Write per-channel integer values to a cocotb signal (packed or unpacked).
     """
     try:
-        _ = signal[0]
-        # Unpacked: assign per-element, channel 0 = highest index in HDL array
+        packed = 0
+        mask = (1 << field_bits) - 1
         for i in range(channels):
-            signal[channels - 1 - i].value = values[i]
-    except (TypeError, IndexError, AttributeError):
-        # Packed: join into one integer
-        packed = int(''.join(format(v, f'0{field_bits}b') for v in values), 2)
+            packed |= (values[i] & mask) << (i * field_bits)
         signal.value = packed
+        return
+    except (TypeError, ValueError, AttributeError):
+        pass
+
+    for i in range(channels):
+        signal[i].value = values[i]
 
 
 class Memory:
