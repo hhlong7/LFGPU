@@ -18,6 +18,7 @@ A minimal RISC-V GPU implementation in Verilog built by cal poly CARP on top of 
   - [Matrix Multiplication](/tree/master?tab=readme-ov-file#matrix-multiplication)
 - [Simulation](#simulation)
 - [Performance Measurement](#performance-measurement)
+  - [Milestone Performance Results](#milestone-performance-results)
   - [Milestone 1: RV32IM Scalar Correctness](#milestone-1-rv32im-scalar-correctness)
   - [Milestone 2: Single-Warp Compiler Kernels](#milestone-2-single-warp-compiler-kernels)
 - [Advanced Functionality](#advanced-functionality)
@@ -166,6 +167,22 @@ Below is a sample of the execution traces, showing on each cycle the execution o
 # Performance Measurement
 
 This section describes how to measure performance for Milestone 1 (RV32IM scalar correctness) and Milestone 2 (single-warp compiler kernels).
+
+## Milestone Performance Results
+
+This table records measured simulation results for each kernel across milestones. Fill in cycle counts from `make test_*` output after each milestone. IPC = (instructions in program × threads) / cycles. Time (s) = cycles × 25 µs (clock period).
+
+| Kernel | Threads | Instructions (total) | M1+M2 Cycles | M1+M2 Time (s) | M1+M2 IPC | M3 Cycles | M3 Time (s) | M3 IPC | M4 Cycles | M4 Time (s) | M4 IPC |
+|--------|---------|----------------------|--------------|----------------|-----------|-----------|-------------|--------|-----------|-------------|--------|
+| `test_matadd` (8 threads) | 8 | 136 (17×8) | 471 | 0.01178 | 0.29 | | | | | | |
+| `test_matadd` (32 threads) | 32 | 544 (17×32) | 1833 | 0.04583 | 0.30 | | | | | | |
+| `test_matmul_2x2` | 4 | 124 (31×4) | 1166 | 0.02915 | 0.11 | | | | | | |
+| `test_matmul_4x4` | 16 | 496 (31×16) | 3781 | 0.09453 | 0.13 | | | | | | |
+| `test_negatives` | 4 | 24 (6×4) | 174 | 0.00435 | 0.14 | | | | | | |
+
+> **M1+M2** = RV32IM scalar correctness + single-warp compiler kernels baseline · **M3** = multi-warp scheduling · **M4** = memory latency hiding
+>
+> Time (s) = cycles × 0.000025. Replace `—` with values after running `make test_*` and checking `grep "Completed in" test/logs/<test>.log`.
 
 ## What to Measure
 

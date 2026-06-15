@@ -17,9 +17,10 @@ module lsu #(
     input reg [2:0]  core_state,
     input reg        decoded_mem_read_enable,
     input reg        decoded_mem_write_enable,
+    input reg [31:0] decoded_immediate,
     input reg [2:0]  decoded_funct3,   // load/store width selector
 
-    // rs = effective address (ALU-computed rs1+imm), rt = store data
+    // rs = base address, decoded_immediate = byte offset, rt = store data
     input reg [31:0] rs,
     input reg [31:0] rt,
 
@@ -41,6 +42,8 @@ module lsu #(
                REQUESTING = 2'b01,
                WAITING    = 2'b10,
                DONE       = 2'b11;
+
+    wire [31:0] effective_address = rs + decoded_immediate;
 
     // Sign/zero-extend loaded data according to funct3
     function automatic [31:0] extend_load;
@@ -85,7 +88,7 @@ module lsu #(
                     end
                     REQUESTING: begin
                         mem_read_valid   <= 1;
-                        mem_read_address <= rs[DATA_MEM_ADDR_BITS-1:0] >> 2;  // byte → word
+                        mem_read_address <= effective_address[DATA_MEM_ADDR_BITS-1:0] >> 2;  // byte → word
                         lsu_state        <= WAITING;
                     end
                     WAITING: begin
@@ -110,7 +113,7 @@ module lsu #(
                     end
                     REQUESTING: begin
                         mem_write_valid   <= 1;
-                        mem_write_address <= rs[DATA_MEM_ADDR_BITS-1:0] >> 2;  // byte → word
+                        mem_write_address <= effective_address[DATA_MEM_ADDR_BITS-1:0] >> 2;  // byte → word
                         mem_write_data    <= mask_store(rt, decoded_funct3);
                         lsu_state         <= WAITING;
                     end

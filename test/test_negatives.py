@@ -15,7 +15,7 @@ async def test_negatives(dut):
     # Verify results
     ###
 
-    expected_results = [253, 0, 0, 0]
+    expected_results = [0xFFFF_FFFD, 0, 0, 0]
     for i, expected in enumerate(expected_results):
         result = data_memory.memory[i]
         assert result == expected, f"Result mismatch at index {

@@ -58,39 +58,38 @@ module alu (
                               $signed(op_a) % $signed(op_b);
     wire [31:0] remu_result = div_by_zero  ? op_a : op_a % op_b;
 
-    always @(posedge clk) begin
-        if (reset) begin
-            alu_out_reg <= 32'b0;
-        end else if (enable && core_state == 3'b101) begin   // EXECUTE
+    always @(*) begin
+        alu_out_reg = 32'b0;
+        if (!reset && enable) begin
             case (decoded_alu_op)
                 // ── RV32I ──────────────────────────────────────────────────
-                5'd0:  alu_out_reg <= op_a + op_b;
-                5'd1:  alu_out_reg <= op_a - op_b;
-                5'd2:  alu_out_reg <= op_a << shamt;
-                5'd3:  alu_out_reg <= {31'b0, $signed(op_a) < $signed(op_b)};
-                5'd4:  alu_out_reg <= {31'b0, op_a < op_b};
-                5'd5:  alu_out_reg <= op_a ^ op_b;
-                5'd6:  alu_out_reg <= op_a >> shamt;
-                5'd7:  alu_out_reg <= $signed(op_a) >>> shamt;
-                5'd8:  alu_out_reg <= op_a | op_b;
-                5'd9:  alu_out_reg <= op_a & op_b;
+                5'd0:  alu_out_reg = op_a + op_b;
+                5'd1:  alu_out_reg = op_a - op_b;
+                5'd2:  alu_out_reg = op_a << shamt;
+                5'd3:  alu_out_reg = {31'b0, $signed(op_a) < $signed(op_b)};
+                5'd4:  alu_out_reg = {31'b0, op_a < op_b};
+                5'd5:  alu_out_reg = op_a ^ op_b;
+                5'd6:  alu_out_reg = op_a >> shamt;
+                5'd7:  alu_out_reg = $signed(op_a) >>> shamt;
+                5'd8:  alu_out_reg = op_a | op_b;
+                5'd9:  alu_out_reg = op_a & op_b;
                 // Branch comparators — alu_out[0] = taken
-                5'd10: alu_out_reg <= {31'b0, op_a == op_b};
-                5'd11: alu_out_reg <= {31'b0, op_a != op_b};
-                5'd12: alu_out_reg <= {31'b0, $signed(op_a) <  $signed(op_b)};
-                5'd13: alu_out_reg <= {31'b0, $signed(op_a) >= $signed(op_b)};
-                5'd14: alu_out_reg <= {31'b0, op_a <  op_b};
-                5'd15: alu_out_reg <= {31'b0, op_a >= op_b};
+                5'd10: alu_out_reg = {31'b0, op_a == op_b};
+                5'd11: alu_out_reg = {31'b0, op_a != op_b};
+                5'd12: alu_out_reg = {31'b0, $signed(op_a) <  $signed(op_b)};
+                5'd13: alu_out_reg = {31'b0, $signed(op_a) >= $signed(op_b)};
+                5'd14: alu_out_reg = {31'b0, op_a <  op_b};
+                5'd15: alu_out_reg = {31'b0, op_a >= op_b};
                 // ── RV32M ──────────────────────────────────────────────────
-                5'd16: alu_out_reg <= prod_ss[31:0];     // MUL
-                5'd17: alu_out_reg <= prod_ss[63:32];    // MULH
-                5'd18: alu_out_reg <= prod_su[63:32];    // MULHSU
-                5'd19: alu_out_reg <= prod_uu[63:32];    // MULHU
-                5'd20: alu_out_reg <= div_result;        // DIV
-                5'd21: alu_out_reg <= divu_result;       // DIVU
-                5'd22: alu_out_reg <= rem_result;        // REM
-                5'd23: alu_out_reg <= remu_result;       // REMU
-                default: alu_out_reg <= 32'b0;
+                5'd16: alu_out_reg = prod_ss[31:0];     // MUL
+                5'd17: alu_out_reg = prod_ss[63:32];    // MULH
+                5'd18: alu_out_reg = prod_su[63:32];    // MULHSU
+                5'd19: alu_out_reg = prod_uu[63:32];    // MULHU
+                5'd20: alu_out_reg = div_result;        // DIV
+                5'd21: alu_out_reg = divu_result;       // DIVU
+                5'd22: alu_out_reg = rem_result;        // REM
+                5'd23: alu_out_reg = remu_result;       // REMU
+                default: alu_out_reg = 32'b0;
             endcase
         end
     end

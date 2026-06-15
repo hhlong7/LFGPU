@@ -219,6 +219,7 @@ module core #(
                 .core_state          (core_state),
                 .decoded_mem_read_enable (decoded_mem_read_enable),
                 .decoded_mem_write_enable(decoded_mem_write_enable),
+                .decoded_immediate   (decoded_immediate),
                 .decoded_funct3      (decoded_funct3),
                 .rs                  (rs_computes[i]),
                 .rt                  (rt_computes[i]),

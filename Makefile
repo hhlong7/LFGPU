@@ -8,14 +8,15 @@ export LIBPYTHON_LOC=$(shell cocotb-config --libpython)
 # - make show_matadd
 
 VERILATOR_ARGS = "--cc --exe --build --trace -Isrc -Wno-WIDTHEXPAND -Wno-ASCRANGE -Wno-WIDTHTRUNC -Wno-CASEINCOMPLETE -Wno-UNSIGNED -Wno-MULTIDRIVEN -Wno-IMPLICITSTATIC --compiler gcc -O3 -CFLAGS "-O3""
-VERILOG_SOURCES = "$(shell find src -name '*.sv')"
-VERILOG_HEADER = "$(shell find src -name '*.svh')"
+VERILOG_SOURCE_FILES := $(shell find src -name '*.sv' | sort)
+VERILOG_HEADER_FILES := $(shell find src -name '*.svh' | sort)
+VERILOG_SOURCES = "$(VERILOG_SOURCE_FILES)"
+VERILOG_HEADER = "$(VERILOG_HEADER_FILES)"
 clean: 
 	rm -rf build/*
 	rm -rf sim_build/*
 
-#SIM ?= icarus
-SIM ?= verilator
+SIM ?= icarus
 TOPLEVEL = gpu
 BUILD_DIR = build
 TOP_V = $(BUILD_DIR)/gpu.v
@@ -38,20 +39,20 @@ else
 	$(error Unknown SIM '$(SIM)')
 endif
 
-$(BUILD_DIR)/gpu.v:
-	mkdir build --parents
+$(BUILD_DIR)/gpu.v: $(VERILOG_SOURCE_FILES) $(VERILOG_HEADER_FILES)
+	mkdir -p $(BUILD_DIR)
 # Convert alu 
 	#make compile_alu
 # build convert all source files to v and dump them into gpu.v
-	sv2v -I --siloed src/* -w build/gpu.v
+	sv2v -I --siloed src/* -w $(TOP_V)
 # add newline to end of gpu.v (?)
-	echo "" >> build/gpu.v
+	echo "" >> $(TOP_V)
 # add alu.v contents to gpu.v (not sure why alu not included by first sv2v call)
 	#cat build/alu.v >> build/gpu.v
 # add "timescale 1ns/1ns" line to gpu.v 
-	echo '`timescale 1ns/1ns' > build/temp.v
-	cat build/gpu.v >> build/temp.v
-	mv build/temp.v build/gpu.v
+	echo '`timescale 1ns/1ns' > $(BUILD_DIR)/temp.v
+	cat $(TOP_V) >> $(BUILD_DIR)/temp.v
+	mv $(BUILD_DIR)/temp.v $(TOP_V)
 
 ### compile GPU.v into simulatable sim.VVP format, set top level module to gpu
 ##	iverilog -o build/sim.vvp -s gpu -g2012 build/gpu.v
@@ -123,4 +124,3 @@ measure_hardware_yosys: compile_verilog
 
 generate_plots:
 	cd test && python ./parse_test_logs.py ./results/test_all_*.log
-
