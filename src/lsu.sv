@@ -85,7 +85,7 @@ module lsu #(
                     end
                     REQUESTING: begin
                         mem_read_valid   <= 1;
-                        mem_read_address <= rs[DATA_MEM_ADDR_BITS-1:0];
+                        mem_read_address <= rs[DATA_MEM_ADDR_BITS-1:0] >> 2;  // byte → word
                         lsu_state        <= WAITING;
                     end
                     WAITING: begin
@@ -110,7 +110,7 @@ module lsu #(
                     end
                     REQUESTING: begin
                         mem_write_valid   <= 1;
-                        mem_write_address <= rs[DATA_MEM_ADDR_BITS-1:0];
+                        mem_write_address <= rs[DATA_MEM_ADDR_BITS-1:0] >> 2;  // byte → word
                         mem_write_data    <= mask_store(rt, decoded_funct3);
                         lsu_state         <= WAITING;
                     end

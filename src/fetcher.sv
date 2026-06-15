@@ -37,7 +37,7 @@ module fetcher #(
                     if (core_state == 3'b001) begin   // FETCH state
                         fetcher_state    <= FETCHING;
                         mem_read_valid   <= 1;
-                        mem_read_address <= current_pc;
+                        mem_read_address <= current_pc >> 2;  // byte → word address
                     end
                 end
                 FETCHING: begin

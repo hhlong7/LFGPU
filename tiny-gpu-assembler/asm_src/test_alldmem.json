@@ -3,10 +3,10 @@
   "memory_delay": 1,
   "threads": 8,
   "hardware": {
-    "program_addr_bits": 32,
+    "program_addr_bits": 8,
     "program_data_bits": 32,
     "program_channels": 1,
-    "data_addr_bits": 32,
+    "data_addr_bits": 8,
     "data_data_bits": 32,
     "data_channels": 4
   },

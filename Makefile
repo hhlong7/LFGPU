@@ -7,7 +7,7 @@ export LIBPYTHON_LOC=$(shell cocotb-config --libpython)
 # - make compile_matadd
 # - make show_matadd
 
-VERILATOR_ARGS = "--cc --exe --build --trace -Isrc -Wno-WIDTHEXPAND -Wno-ASCRANGE -Wno-WIDTHTRUNC -Wno-CASEINCOMPLETE -Wno-UNSIGNED  -Wno-MULTIDRIVEN --compiler gcc -O3 -CFLAGS "-O3""
+VERILATOR_ARGS = "--cc --exe --build --trace -Isrc -Wno-WIDTHEXPAND -Wno-ASCRANGE -Wno-WIDTHTRUNC -Wno-CASEINCOMPLETE -Wno-UNSIGNED -Wno-MULTIDRIVEN -Wno-IMPLICITSTATIC --compiler gcc -O3 -CFLAGS "-O3""
 VERILOG_SOURCES = "$(shell find src -name '*.sv')"
 VERILOG_HEADER = "$(shell find src -name '*.svh')"
 clean: 
@@ -24,7 +24,7 @@ test_%: MODULE = test.test_$*
 test_%: 
 ifeq ($(SIM),icarus)
 	iverilog -o $(BUILD_DIR)/sim.vvp -s $(TOPLEVEL) -g2012 $(TOP_V)
-	MODULE=$(MODULE) vvp -M $(shell cocotb-config --prefix)/cocotb/libs -m libcocotbvpi_icarus $(BUILD_DIR)/sim.vvp
+	COCOTB_TEST_MODULES=$(MODULE) PYGPI_PYTHON_BIN=$(shell cocotb-config --python-bin) MODULE=$(MODULE) vvp -M $(shell cocotb-config --lib-dir) -m libcocotbvpi_icarus $(BUILD_DIR)/sim.vvp
 else ifeq ($(SIM),verilator)
 	
 	MODULE=$(MODULE) \
@@ -110,7 +110,7 @@ compile_all_binaries:
 
 #fulltest
 ft_%: compile_all_binaries
-	make test_$*
+	$(MAKE) SIM=$(SIM) test_$*
 
 record_benchmark: compile_all_binaries measure_hardware_yosys
 	make test_all > ./test/results/test_all.log

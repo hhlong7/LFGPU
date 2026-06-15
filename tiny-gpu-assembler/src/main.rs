@@ -198,10 +198,10 @@ fn main() {
         memory_delay: 1,
         threads,
         hardware: Hardware {
-            program_addr_bits: 32,
+            program_addr_bits: 8,   // word-addressed; 256 words covers all test programs
             program_data_bits: 32,
             program_channels:  1,
-            data_addr_bits:    32,
+            data_addr_bits:    8,   // word-addressed; 256 words covers all test data
             data_data_bits:    32,
             data_channels:     4,
         },
