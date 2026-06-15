@@ -17,6 +17,9 @@ A minimal RISC-V GPU implementation in Verilog built by cal poly CARP on top of 
   - [Matrix Addition](#matrix-addition)
   - [Matrix Multiplication](/tree/master?tab=readme-ov-file#matrix-multiplication)
 - [Simulation](#simulation)
+- [Performance Measurement](#performance-measurement)
+  - [Milestone 1: RV32IM Scalar Correctness](#milestone-1-rv32im-scalar-correctness)
+  - [Milestone 2: Single-Warp Compiler Kernels](#milestone-2-single-warp-compiler-kernels)
 - [Advanced Functionality](#advanced-functionality)
 - [Next Steps](#next-steps)
 
@@ -159,6 +162,108 @@ Below is a sample of the execution traces, showing on each cycle the execution o
 ![execution trace](docs/images/trace.png)
 
 **For anyone trying to run the simulation or play with this repo, please feel free to DM me on [twitter](https://twitter.com/majmudaradam) if you run into any issues - I want you to get this running!**
+
+# Performance Measurement
+
+This section describes how to measure performance for Milestone 1 (RV32IM scalar correctness) and Milestone 2 (single-warp compiler kernels).
+
+## What to Measure
+
+| Metric | Description |
+|--------|-------------|
+| **Cycle count** | Total clock cycles from `start` to `done` |
+| **Instruction count** | Number of instructions in `program_memory` × thread count |
+| **IPC (Instructions Per Cycle)** | `instruction_count / cycles` — higher is better |
+| **Memory stall cycles** | Cycles where all warps are waiting on data memory |
+| **Throughput** | How many threads complete per cycle |
+
+## How the Testbench Measures Cycles
+
+The CocoTB testbench in `test/helpers/testbench_bin.py` counts cycles automatically.
+Every test prints cycle count to stdout when the GPU `done` signal is asserted:
+
+```
+finished at cycle <N>
+Completed in <N> cycles
+```
+
+The clock period is **25 µs** (set in `test/helpers/setup.py`), so wall time = `N × 25 µs`.
+
+## Running Performance Tests
+
+**Prerequisites:** Install [iverilog](https://steveicarus.github.io/iverilog/usage/installation.html), [cocotb](https://docs.cocotb.org/en/stable/install.html), and [sv2v](https://github.com/zachjs/sv2v/releases).
+
+```bash
+# Milestone 1 — scalar RV32IM correctness (8 threads)
+make test_matadd
+
+# Milestone 2 — single-warp compiler kernels (8 and 32 threads)
+make test_matadd    # vector addition, 8 threads
+make test_matmul    # matrix multiply, 2×2 and 4×4
+```
+
+Each run logs to `test/logs/`. Look for the cycle count at the end of the log.
+
+## Milestone 1: RV32IM Scalar Correctness
+
+**Goal:** Every RV32I + RV32M instruction produces the correct result in a single warp.
+
+**Key test programs:**
+
+| Test | Threads | Instructions | What it verifies |
+|------|---------|--------------|------------------|
+| `test_matadd_8_threads` | 8 | 17 | ADD, SLLI, LW, SW, CSR reads |
+| `test_negatives` | varies | — | SUB, negative immediates, signed arithmetic |
+| `test_matmul_2x2` | 4 | — | MUL (RV32M), nested addressing |
+
+**How to compute IPC manually:**
+
+```python
+# program_memory word count from the JSON file
+import json
+with open("tiny-gpu-assembler/asm_src/test_matadd_8_threads.json") as f:
+    d = json.load(f)
+instr_count = len(d["program_memory"]) * d["threads"]
+# IPC = instr_count / cycles_from_sim_output
+```
+
+**Expected baseline** (memory_delay=1): matadd 8 threads should complete in ~40–80 cycles depending on warp stall behavior.
+
+## Milestone 2: Single-Warp Compiler Kernels
+
+**Goal:** Assembled kernels (from `tiny-gpu-assembler/asm_src/`) run correctly end-to-end through RTL simulation.
+
+**Key test programs:**
+
+| Test | Threads | Kernel | Output check |
+|------|---------|--------|--------------|
+| `test_matadd_8_threads` | 8 | C[i] = A[i] + B[i] | C at byte addr 64–95 |
+| `test_matadd_32_threads` | 32 | C[i] = A[i] + B[i] | C at byte addr 256–383 |
+| `test_matmul_2x2` | 4 | C = A × B (2×2) | C at byte addr 32–47 |
+| `test_matmul_4x4` | 16 | C = A × B (4×4) | C at byte addr 128–191 |
+
+**Correctness check** — the testbench `verify_matadd()` asserts that output memory matches the expected result element-by-element. A passing test with no assertion errors = correctness verified.
+
+**Performance goal for M2:** All 4 kernels above pass correctness checks. Cycle counts are recorded as the baseline for future milestones (pipelining, memory coalescing, multi-warp hiding).
+
+## Interpreting Results
+
+```
+# Good run output looks like:
+finished at cycle 62
+Completed in 62 cycles
+
+# Followed by final memory state showing correct output values
+```
+
+To compare across runs (e.g. before/after an optimization), redirect logs:
+
+```bash
+make test_matadd 2>&1 | tee test/logs/matadd_baseline.txt
+grep "Completed in" test/logs/matadd_baseline.txt
+```
+
+---
 
 # Future CARP GAR projects 
 
