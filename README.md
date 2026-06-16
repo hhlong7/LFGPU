@@ -17,6 +17,10 @@ A minimal RISC-V GPU implementation in Verilog built by cal poly CARP on top of 
   - [Matrix Addition](#matrix-addition)
   - [Matrix Multiplication](/tree/master?tab=readme-ov-file#matrix-multiplication)
 - [Simulation](#simulation)
+- [How to Use](#how-to-use)
+  - [Prerequisites](#prerequisites)
+  - [Run an Existing Kernel](#run-an-existing-kernel)
+  - [Write and Run Your Own Kernel](#write-and-run-your-own-kernel)
 - [Performance Measurement](#performance-measurement)
   - [Milestone Performance Results](#milestone-performance-results)
   - [Milestone 1: RV32IM Scalar Correctness](#milestone-1-rv32im-scalar-correctness)
@@ -53,69 +57,154 @@ Our current project is expanding the ISA to accomodate RISC-V and to be able to 
 
 ## GPU
 
-For the current GAR project these are the changes that need to be made to each of the following modules
+The top-level `gpu` module instantiates the dispatcher, two memory controllers (one for program memory, one for data memory), and `NUM_CORES` compute cores. It exposes an external async memory interface and a simple start/done handshake for the host.
 
-1. Device control register
-2. Decoder
-3. LSU
-4. ALU
-5. PC
+Key parameters (set at elaboration time):
+- `NUM_CORES` — number of parallel compute cores
+- `WARPS_PER_CORE` — warps each core can interleave
+- `THREADS_PER_WARP` — SIMD width (lanes per warp)
+- `THREADS_PER_BLOCK` — total threads per dispatched block
 
 ### Device Control Register
 
-The device control register need to be changed to store metadata specifying how kernels should be executed on the GPU.
+The device control register (`dcr.sv`) holds an 8-bit `thread_count` value written by the host before asserting `start`. The dispatcher reads this to know how many total threads the kernel requires and divides them into blocks of `THREADS_PER_BLOCK`.
 
 ### Dispatcher
 
-None
+The dispatcher (`dispatch.sv`) divides the total thread count into fixed-size blocks and assigns them to cores as cores become free.
+
+- Computes `total_blocks = ceil(thread_count / THREADS_PER_BLOCK)`
+- Tracks `blocks_dispatched` and `blocks_done` independently
+- When a core finishes its block (`core_done` asserts), the dispatcher resets that core and immediately hands it the next unstarted block
+- Handles the last (potentially partial) block — sends the correct `core_thread_count` when `thread_count` is not a multiple of `THREADS_PER_BLOCK`
+- Asserts `done` once `blocks_done == total_blocks`
 
 ## Memory
 
-TBD
+The GPU uses an external asynchronous memory model — program memory and data memory live outside the GPU and are accessed over a valid/ready handshake bus. In simulation, both are implemented as Python objects in the cocotb testbench.
 
 ### Global Memory
 
-TBD
+Global memory is a flat byte-addressed 32-bit word array. The initial contents (input data) are loaded by the testbench from the assembled JSON file before `start` is asserted. Kernel outputs are written here by `SW`/`SH`/`SB` instructions and read back by the testbench after `done` asserts.
+
+- Address width: 32 bits (RV32I byte addressing)
+- Data width: 32 bits per word
+- Access channels: 4 concurrent read/write channels to data memory, 1 to program memory
+- Latency: configurable per test (`memory_delay` in the JSON, default = 2 cycles)
 
 ### Memory Controllers
 
-None
+The memory controller (`controller.sv`) sits between the cores and external memory, arbitrating concurrent requests across a limited number of memory channels.
+
+There are two instances:
+- **Data memory controller** — serves all LSUs across all cores (up to `NUM_CORES × THREADS_PER_WARP` consumers, 4 channels)
+- **Program memory controller** — serves one fetcher per core (read-only, 1 channel)
+
+Each channel runs an independent 5-state FSM:
+
+```
+IDLE → READ_WAITING → READ_RELAYING → IDLE
+IDLE → WRITE_WAITING → WRITE_RELAYING → IDLE
+```
+
+In `IDLE`, the channel scans consumers round-robin for a pending valid request and claims it. It then issues the request to external memory, waits for `mem_read_ready`/`mem_write_ready`, relays the result back to the consumer, and resets to `IDLE`. A `channel_serving_consumer` bitmask prevents two channels from claiming the same request simultaneously.
 
 ### Cache (WIP)
 
-None
+No cache is currently implemented. All loads and stores go directly to global memory through the controller. Adding a cache is listed as a future milestone.
 
 ## Core
 
-Changes
+Each compute core runs multiple warps through the 6-stage pipeline. It instantiates one fetcher, one decoder, one warp scheduler, one warp manager, and `THREADS_PER_WARP` instances each of: register file, ALU, LSU, PC, and CSR bank.
 
 ### Warp Scheduler
 
-None
+The warp scheduler (`warp_scheduler.sv`) is the central control unit of the core. It interleaves `WARPS_PER_CORE` warps through the pipeline in round-robin order, hiding memory latency by switching to a ready warp while another warp waits on a load or store.
+
+Each warp tracks three pieces of state:
+- **`warps_states`** — which pipeline stage this warp is in (FETCH/DECODE/…/DONE)
+- **`warp_status`** — READY, STALL, MASKED, or SCHEDULED
+- **`warp_pcs`** — the current program counter for this warp
+
+On every `IDLE` cycle the scheduler picks the next warp in round-robin order, loads its PC, and drives it through the pipeline. In `WAIT`, the scheduler checks all LSU states and holds the warp there until every thread's memory request has resolved. When a warp hits `ebreak` (`decoded_ret`), its state is set to `DONE`. When all warps are done, the core asserts `done`.
 
 ### Fetcher
 
-None
+The fetcher (`fetcher.sv`) issues a single read request to program memory for the current warp's PC and holds the returned 32-bit instruction until the decoder consumes it.
+
+3-state FSM: `IDLE → FETCHING → FETCHED`
+
+The PC is byte-addressed (RV32I), so the fetcher right-shifts it by 2 to produce a word address before sending it to the memory controller. It stays in `FETCHED` until the pipeline advances to `DECODE`, then returns to `IDLE`.
 
 ### Decoder
 
-Changed to properly decode the RISC-V ISA 
+The decoder (`decoder.sv`) translates a 32-bit RV32IM instruction into all control signals in a single `DECODE` cycle. It handles all 10 opcode classes:
+
+| Opcode class | Instructions |
+|---|---|
+| R-type | ADD, SUB, SLL, SLT, SLTU, XOR, SRL, SRA, OR, AND + all RV32M |
+| I-ALU | ADDI, SLTI, SLTIU, XORI, ORI, ANDI, SLLI, SRLI, SRAI |
+| LOAD | LB, LH, LW, LBU, LHU |
+| STORE | SB, SH, SW |
+| BRANCH | BEQ, BNE, BLT, BGE, BLTU, BGEU |
+| JAL / JALR | Unconditional jumps with link |
+| LUI / AUIPC | Upper-immediate and PC-relative upper |
+| SYSTEM | CSRR (reads threadIdx/blockIdx/blockDim) + EBREAK |
+
+All five immediate formats (I/S/B/U/J) are reconstructed and sign-extended to 32 bits combinationally. The decoder also flags `divergence_event` on any branch instruction for the divergence stack.
 
 ### Register Files
 
-None
+Each thread has its own register file (`registers.sv`) with 32 × 32-bit registers. `x0` is hardwired to zero and can never be written (RV32I ABI). Reads happen in `DECODE`; writes happen in `UPDATE`.
+
+The writeback source is selected by `decoded_reg_input_mux`:
+
+| Value | Source |
+|---|---|
+| `00` | ALU result |
+| `01` | Memory load (from LSU) |
+| `10` | PC+4 (JAL/JALR return address) |
+| `11` | CSR read result (threadIdx / blockIdx / blockDim) |
 
 ### ALUs
 
-Needs to be expanded to compute a larger set of the RISC-V ISA
+Each thread has a dedicated ALU (`alu.sv`) that computes one result per `EXECUTE` cycle. It implements the full RV32IM operation set — 24 operations total:
+
+- **RV32I base (10):** ADD, SUB, SLL, SLT, SLTU, XOR, SRL, SRA, OR, AND
+- **Branch comparators (6):** BEQ, BNE, BLT, BGE, BLTU, BGEU — output `alu_out[0]` as a taken/not-taken flag for the PC
+- **RV32M multiply (4):** MUL, MULH, MULHSU, MULHU
+- **RV32M divide (4):** DIV, DIVU, REM, REMU — with correct handling of divide-by-zero and signed overflow corner cases per the RISC-V spec
+
+Operand A is either `rs1` or `current_pc` (for AUIPC). Operand B is either `rs2` or the sign-extended immediate.
 
 ### LSUs
 
-Expand the ISA so it can incorporate the more complete RISC-V ISA
+Each thread has a dedicated load-store unit (`lsu.sv`) that handles one memory transaction at a time. It runs a 4-state FSM: `IDLE → REQUESTING → WAITING → DONE`.
+
+Supported widths (selected by `funct3`):
+
+| Instruction | Width | Sign |
+|---|---|---|
+| LB / SB | 8-bit | signed / — |
+| LH / SH | 16-bit | signed / — |
+| LW / SW | 32-bit | — / — |
+| LBU | 8-bit | zero-extended |
+| LHU | 16-bit | zero-extended |
+
+The effective address is computed as `rs1 + immediate`. Loaded data is sign- or zero-extended to 32 bits before being written to the register file.
 
 ### PCs
 
-Expand to compute more branching instructions 
+Each thread has a program counter (`pc.sv`) that computes `next_pc` during `EXECUTE`. Four modes are supported via `decoded_pc_src`:
+
+| Mode | Next PC |
+|---|---|
+| Sequential | `PC + 4` |
+| Branch | `PC + imm_b` if ALU taken flag is set, else `PC + 4` |
+| JAL | `PC + imm_j` (unconditional) |
+| JALR | `(rs1 + imm_i) & ~1` (unconditional, clears bit 0) |
+
+Disabled threads (masked out by the divergence stack) still advance their PC sequentially so the warp scheduler always has a valid `next_pc` to read from the head thread.
 
 # ISA
 
@@ -142,27 +231,163 @@ In practice, several of these steps could be compressed to be optimize processin
 
 ### Thread
 
+Each thread is an independent lane of execution within a warp. Threads within the same warp execute in lockstep (SIMD) — they share a PC and pipeline state, but each has its own private register file and its own LSU.
+
+**Per-thread resources:**
+- **Register file** — 32 × 32-bit registers (x0 hardwired to zero per RV32I ABI)
+- **ALU** — computes arithmetic, logic, multiply/divide, and branch comparisons
+- **LSU** — issues independent load/store requests to data memory
+- **PC** — tracks the thread's next instruction address
+- **CSR bank** — read-only, provides thread identity (threadIdx, blockIdx, blockDim)
+
+**Thread identity** is read via `csrr` instructions at the start of every kernel:
+
+```asm
+csrr a0, 0xCC0   ; threadIdx — index within the current block (0 … blockDim-1)
+csrr a1, 0xCC1   ; blockIdx  — which block this thread was dispatched to
+csrr a2, 0xCC2   ; blockDim  — number of threads per block
+```
+
+Threads use these values to compute a unique global index (`i = blockIdx * blockDim + threadIdx`) and map it to a position in their input/output arrays.
+
+A thread signals completion by executing `ebreak` (encoded as `0x00100073`). When all threads in a warp have reached `ebreak`, the warp transitions to `DONE` and the core notifies the dispatcher that its block is finished.
+
 
 
 # Simulation
 
 tiny-gpu is setup to simulate the execution of both of the above kernels. Before simulating, you'll need to install [iverilog](https://steveicarus.github.io/iverilog/usage/installation.html) and [cocotb](https://docs.cocotb.org/en/stable/install.html):
 
-- Install Verilog compilers with `brew install icarus-verilog` and `pip3 install cocotb`
+
+# How to Use
+
+## Prerequisites
+
+Install the following tools before doing anything else:
+
 - Download the latest version of sv2v from https://github.com/zachjs/sv2v/releases, unzip it and put the binary in $PATH.
-- Run `mkdir build` in the root directory of this repository.
 
-Once you've installed the pre-requisites, you can run the kernel simulations with `make test_matadd` and `make test_matmul`.
+```bash
+# Icarus Verilog simulator
+brew install icarus-verilog        # macOS
+sudo apt install iverilog          # Ubuntu/Debian
 
-Executing the simulations will output a log file in `test/logs` with the initial data memory state, complete execution trace of the kernel, and final data memory state.
+# Python simulation framework
+pip3 install cocotb
 
-If you look at the initial data memory state logged at the start of the logfile for each, you should see the two start matrices for the calculation, and in the final data memory at the end of the file you should also see the resultant matrix.
+# SystemVerilog → Verilog converter
+# Download the binary from https://github.com/zachjs/sv2v/releases
+# Unzip and place sv2v in your $PATH
 
-Below is a sample of the execution traces, showing on each cycle the execution of every thread within every core, including the current instruction, PC, register values, states, etc.
+# Rust toolchain (for the assembler)
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
-![execution trace](docs/images/trace.png)
+# Create the build directory
+mkdir -p build
+```
 
-**For anyone trying to run the simulation or play with this repo, please feel free to DM me on [twitter](https://twitter.com/majmudaradam) if you run into any issues - I want you to get this running!**
+## Run an Existing Kernel
+
+The build system compiles all SystemVerilog sources to `build/gpu.v` automatically on first run.
+
+```bash
+# Vector addition (8 threads)
+make test_matadd
+
+# Matrix multiply (2×2 and 4×4)
+make test_matmul
+
+# Negative and signed arithmetic
+make test_negatives
+```
+
+Each test prints a cycle-by-cycle execution trace to `test/logs/` and ends with:
+
+```
+finished at cycle <N>
+Completed in <N> cycles
+```
+
+The final data memory dump shows the output values written by the kernel — compare against the expected results to verify correctness.
+
+## Write and Run Your Own Kernel
+
+### Step 1 — Write the assembly
+
+Create `tiny-gpu-assembler/asm_src/test_<name>.asm`. The assembler speaks standard RV32IM assembly with three GPU-specific directives:
+
+```asm
+; my_kernel.asm — adds a scalar offset to every element
+.threads 8                     ; number of GPU threads to launch
+.data 10 20 30 40 50 60 70 80 ; initial data memory (loaded before kernel runs)
+
+; Each thread computes its own index:
+csrr  a0, 0xCC0    ; a0 = threadIdx  (which thread am I?)
+csrr  a1, 0xCC1    ; a1 = blockIdx
+csrr  a2, 0xCC2    ; a2 = blockDim
+mul   a1, a1, a2   ; blockIdx * blockDim
+add   a0, a0, a1   ; i = blockIdx * blockDim + threadIdx
+
+slli  t0, a0, 2    ; byte offset = i * 4
+lw    t1, 0(t0)    ; load input[i]
+
+li    t2, 100
+add   t1, t1, t2   ; input[i] + 100
+
+sw    t1, 0(t0)    ; store result back
+
+ebreak             ; signal this thread is done — every kernel must end with ebreak
+```
+
+**Special CSR reads (thread identity):**
+
+| CSR address | ABI name | Value |
+|------------|----------|-------|
+| `0xCC0` | `threadIdx` | This thread's index within the block (0 … blockDim-1) |
+| `0xCC1` | `blockIdx` | Which block this thread belongs to |
+| `0xCC2` | `blockDim` | Number of threads per block |
+
+Supported instructions: all RV32I base instructions plus RV32M multiply/divide (`mul`, `mulh`, `div`, `rem`, etc.). Every kernel must terminate with `ebreak`.
+
+### Step 2 — Assemble it
+
+```bash
+make assemble_<name>
+# Example:
+make assemble_my_kernel
+```
+
+This produces `tiny-gpu-assembler/asm_build/test_<name>.json` containing the encoded program and initial data memory.
+
+### Step 3 — Write a cocotb test
+
+Create `test/test_<name>.py`:
+
+```python
+import cocotb
+from .helpers.testbench_bin import load_json_binary, setup_wrap
+
+@cocotb.test
+async def test_my_kernel(dut):
+    test_conf = load_json_binary("./tiny-gpu-assembler/asm_build/test_my_kernel.json")
+    data_memory = await setup_wrap(dut, test_conf)
+
+    # Verify results — data_memory.memory is a list of 32-bit words
+    for i in range(test_conf["threads"]):
+        expected = test_conf["initial_data"][i] + 100
+        assert data_memory.memory[i] == expected, \
+            f"Thread {i}: expected {expected}, got {data_memory.memory[i]}"
+```
+
+### Step 4 — Run it
+
+```bash
+make test_<name>
+# Example:
+make test_my_kernel
+```
+
+The Makefile rebuilds `build/gpu.v` from source if any `.sv` file has changed, then runs the cocotb testbench. Check `test/logs/` for the full execution trace.
 
 # Performance Measurement
 
@@ -323,8 +548,6 @@ This is useful for cases where threads need to exchange shared data with each ot
 
 # Next Steps
 
-Updates I want to make in the future to improve the design, anyone else is welcome to contribute as well:
-
 - [ ] Add a simple cache for instructions
 - [ ] Build an adapter to use GPU with Tiny Tapeout 7
 - [ ] Add basic branch divergence
@@ -333,4 +556,4 @@ Updates I want to make in the future to improve the design, anyone else is welco
 - [ ] Optimize control flow and use of registers to improve cycle time
 - [ ] Write a basic graphics kernel or add simple graphics hardware to demonstrate graphics functionality
 
-**For anyone curious to play around or make a contribution, feel free to put up a PR with any improvements you'd like to add 😄**
+**Forked from Adam Maj's Tiny GPU, and Cal Poly CARP's GAR**
